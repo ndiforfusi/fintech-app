@@ -14,7 +14,6 @@
   <name>FinTech Credit Expense Tracker</name>
   <description>Track credit card expenses and manage spending</description>
 
-  <!-- ✅ Use the actual version in parent -->
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
@@ -47,6 +46,7 @@
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-j</artifactId>
+      <version>8.0.33</version>
     </dependency>
 
     <!-- Validation -->
@@ -55,7 +55,7 @@
       <artifactId>spring-boot-starter-validation</artifactId>
     </dependency>
 
-    <!-- Optional Dev Tools -->
+    <!-- Dev Tools -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
