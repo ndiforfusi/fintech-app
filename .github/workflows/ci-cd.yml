@@ -1,0 +1,58 @@
+name: CI-CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  AWS_REGION: us-east-2
+  AWS_ACCOUNT_ID: 999568710647
+  ECR_REGISTRY: 999568710647.dkr.ecr.us-east-2.amazonaws.com
+  ECR_REPO: fintech-app
+  IMAGE_TAG: "1.0.0"
+
+jobs:
+  build:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build with Maven
+        run: mvn clean package -DskipTests
+
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build and Push Docker image
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
+
+  deploy:
+    name: Deploy to EKS
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure kubectl
+        uses: aws-actions/eks-setup-kubectl@v1
+        with:
+          cluster-name: dominion-cluster
+          region: ${{ env.AWS_REGION }}
+
+      - name: Apply Kubernetes Resources
+        run: |
+          kubectl apply -f k8s/
