@@ -57,7 +57,7 @@
       <artifactId>spring-boot-starter-validation</artifactId>
     </dependency>
 
-    <!-- 🔁 DevTools (Auto-Reload) -->
+    <!-- 🔁 DevTools -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
@@ -65,21 +65,13 @@
       <optional>true</optional>
     </dependency>
 
-    <!-- 🔧 Fix for PostConstruct / PreDestroy -->
+    <!-- ✅ Fix PostConstruct / PreDestroy -->
     <dependency>
       <groupId>jakarta.annotation</groupId>
       <artifactId>jakarta.annotation-api</artifactId>
       <version>2.1.1</version>
     </dependency>
 
-    <!-- 📘 Swagger (Optional - Uncomment to use) -->
-    <!--
-    <dependency>
-      <groupId>org.springdoc</groupId>
-      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-      <version>2.2.0</version>
-    </dependency>
-    -->
   </dependencies>
 
   <build>
