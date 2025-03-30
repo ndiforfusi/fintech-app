@@ -42,7 +42,7 @@ public class ExpenseController {
         return "redirect:/expenses";
     }
 
-    // 📊 Dashboard view with charts
+    // 📊 Dashboard view with optional card filter
     @GetMapping("/dashboard")
     public String dashboard(@RequestParam(required = false) Long cardId, Model model) {
         List<CreditCard> cards = cardRepo.findAll();
@@ -56,7 +56,7 @@ public class ExpenseController {
             CreditCard card = cardRepo.findById(cardId).orElse(null);
             model.addAttribute("limit", card != null ? card.getCreditLimit() : 0);
 
-            // 📊 Chart Data Injection
+            // 📊 Inject chart data
             Map<String, Double> categoryData = chartService.getCategoryTotals(cardId);
             model.addAttribute("categoryLabels", categoryData.keySet());
             model.addAttribute("categoryData", categoryData.values());
