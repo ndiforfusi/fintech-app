@@ -1,0 +1,7 @@
+namePrefix: dev-
+
+resources:
+- ../../base
+
+patchesStrategicMerge:
+- patch-deployment.yaml
