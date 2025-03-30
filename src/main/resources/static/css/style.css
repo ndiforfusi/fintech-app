@@ -1,18 +1,23 @@
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Poppins', 'Roboto', sans-serif;
     background-color: #F4F6F8;
     margin: 0;
     padding: 0;
     color: #333;
+    background-image: url('/assets/images/dashboard-bg.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 .app-header {
-    background-color: #0A2540;
+    background-color: #1E2A38;
     color: white;
     padding: 1rem 2rem;
     display: flex;
     align-items: center;
     gap: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .logo {
@@ -23,42 +28,91 @@ body {
     max-width: 960px;
     margin: 2rem auto;
     padding: 1rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .styled-table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 2rem;
+    font-size: 0.95rem;
 }
 
 .styled-table th,
 .styled-table td {
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
     padding: 0.75rem;
     text-align: left;
 }
 
 .styled-table th {
-    background-color: #0A2540;
+    background-color: #C7A35C;
     color: #fff;
+    font-weight: 600;
 }
 
-.add-expense-form input {
+.add-expense-form input,
+.add-expense-form select {
     padding: 0.5rem;
     margin: 0.5rem 0;
-    width: calc(100% - 1rem);
+    width: 100%;
     display: block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 .add-expense-form button {
     padding: 0.75rem 1.5rem;
-    background-color: #00B388;
+    background-color: #C7A35C;
     color: white;
     border: none;
     cursor: pointer;
     font-weight: bold;
+    border-radius: 4px;
+    transition: background 0.3s ease;
 }
 
 .add-expense-form button:hover {
-    background-color: #009e7a;
+    background-color: #A9742C;
+}
+
+.card-selector {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    border-color: #C7A35C;
+}
+
+.summary-box {
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    border: 1px solid #C7A35C;
+    background-color: #fffbe6;
+    color: #5a4a1c;
+}
+
+.summary-box.warning {
+    background-color: #fff3cd;
+    border-color: #ffc107;
+}
+
+.summary-box.danger {
+    background-color: #f8d7da;
+    border-color: #dc3545;
+}
+
+.dashboard-charts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+canvas {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }

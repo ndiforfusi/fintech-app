@@ -1,0 +1,22 @@
+# StorageClass Definition
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ebs-sc
+provisioner: ebs.csi.aws.com
+volumeBindingMode: WaitForFirstConsumer
+reclaimPolicy: Retain
+parameters:
+  csi.storage.k8s.io/fstype: xfs
+  type: io1
+  iopsPerGB: "10"
+  encrypted: "true"
+  tagSpecification_1: "app=fintech-app"
+  tagSpecification_2: "technology=k8s"
+allowedTopologies:
+- matchLabelExpressions:
+  - key: topology.ebs.csi.aws.com/zone
+    values:
+    - us-east-2a
+    - us-east-2b
+    - us-east-2c

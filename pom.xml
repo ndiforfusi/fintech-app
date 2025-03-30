@@ -26,50 +26,62 @@
   </properties>
 
   <dependencies>
-    <!-- Web and Template -->
+    <!-- 🌐 Web & MVC -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
 
+    <!-- 🧠 Thymeleaf Template Engine -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-thymeleaf</artifactId>
     </dependency>
 
-    <!-- Data Access -->
+    <!-- 🗃️ Data Access -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
 
-    <!-- ✅ Fixed MySQL connector version -->
+    <!-- 🐬 MySQL Connector -->
     <dependency>
       <groupId>com.mysql</groupId>
       <artifactId>mysql-connector-j</artifactId>
       <version>8.0.33</version>
     </dependency>
 
-    <!-- Validation -->
+    <!-- ✅ Validation -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-validation</artifactId>
     </dependency>
 
-    <!-- Dev Tools -->
+    <!-- 🔁 DevTools (Auto-Reload) -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
       <scope>runtime</scope>
       <optional>true</optional>
     </dependency>
+
+    <!-- 📘 Swagger (Optional - Uncomment to use) -->
+    <!--
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+      <version>2.2.0</version>
+    </dependency>
+    -->
   </dependencies>
 
   <build>
     <plugins>
+      <!-- 🚀 Spring Boot Maven Plugin -->
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>3.1.4</version>
       </plugin>
     </plugins>
   </build>
