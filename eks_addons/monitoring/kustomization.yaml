@@ -1,0 +1,4 @@
+resources:
+- metric-server.yaml
+- grafana-ingress.yaml
+

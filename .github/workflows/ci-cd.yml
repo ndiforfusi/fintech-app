@@ -2,7 +2,11 @@ name: CI-CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: 
+    - main
+  pull_request:
+    branches:
+    - main
 
 env:
   AWS_REGION: us-east-2
@@ -34,8 +38,17 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-      - name: Login to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v1
+      - name: Configure AWS Credentials for ECR
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/prod-GitHubActionsECR
+          role-session-name: GitHubActionsSession
+          audience: sts.amazonaws.com
+
+      - name: Login to AWS ECR
+        run: |
+          aws ecr get-login-password --region $AWS_REGION | sudo docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 
       - name: Build and Push Docker image
         run: |
@@ -43,15 +56,35 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
 
   deploy:
-    name: Deploy to EKS
+    name: Deploy Application to EKS
     needs: build
     runs-on: ubuntu-latest
+    env:
+      TF_ENV: ${{ github.event.inputs.environment }}
     steps:
       - name: Configure kubectl
         uses: aws-actions/eks-setup-kubectl@v1
         with:
-          cluster-name: dominion-cluster
+          cluster-name: ${TF_ENV:-prod}-eks-cluster
           region: ${{ env.AWS_REGION }}
+
+      - name: Update kubeconfig for EKS
+        run: |
+          echo "TF_ENV: $TF_ENV"
+          CLUSTER_NAME=${TF_ENV:-prod}-eks-cluster
+          echo "Using cluster name: $CLUSTER_NAME"
+          aws eks update-kubeconfig --region $AWS_REGION --name "$CLUSTER_NAME"
+
+      - name: Execute Scripts
+        run: |
+          chmod +x eks-addons/script/helm_install.sh eks-addons/script/helm_charts.sh         
+          ./eks-addons/script/helm_install.sh        
+          ./eks-addons/script/helm_charts.sh
+
+      - name: Deploying monitoring and logging solution
+        run: | 
+          kubectl apply -k monitoring    
+          kubectl apply -k elk      
 
       - name: Apply Kubernetes Resources
         run: |
