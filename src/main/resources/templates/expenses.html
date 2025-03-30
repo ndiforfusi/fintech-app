@@ -1,24 +1,50 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><title>Expenses</title></head>
+<head>
+    <title>FinTech | Expenses</title>
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Roboto&display=swap" rel="stylesheet">
+</head>
 <body>
-<h2>Monthly Expenses</h2>
-<table border="1">
-    <tr><th>Vendor</th><th>Amount</th><th>Date</th><th>Category</th></tr>
-    <tr th:each="expense : ${expenses}">
-        <td th:text="${expense.vendor}">Vendor</td>
-        <td th:text="${expense.amount}">0.00</td>
-        <td th:text="${expense.date}">Date</td>
-        <td th:text="${expense.category}">Category</td>
-    </tr>
-</table>
-<h3>Add New</h3>
-<form th:action="@{/expenses}" method="post" th:object="${expense}">
-    <input name="vendor" placeholder="Vendor"/>
-    <input name="amount" placeholder="Amount" type="number" step="0.01"/>
-    <input name="date" type="date"/>
-    <input name="category" placeholder="Category"/>
-    <button type="submit">Add</button>
-</form>
+    <header class="app-header">
+        <img src="/assets/logo/logo-full.png" alt="FinTech Logo" class="logo" />
+        <h1>FinTech Expense Tracker</h1>
+    </header>
+
+    <main class="container">
+        <section class="expense-list">
+            <h2>Monthly Expenses</h2>
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>Vendor</th>
+                        <th>Amount ($)</th>
+                        <th>Date</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="expense : ${expenses}">
+                        <td th:text="${expense.vendor}">Vendor</td>
+                        <td th:text="${expense.amount}">0.00</td>
+                        <td th:text="${expense.date}">Date</td>
+                        <td th:text="${expense.category}">Category</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="add-expense-form">
+            <h3>Add New Expense</h3>
+            <form th:action="@{/expenses}" method="post" th:object="${expense}">
+                <input type="text" name="vendor" placeholder="Vendor" required />
+                <input type="number" name="amount" step="0.01" placeholder="Amount" required />
+                <input type="date" name="date" required />
+                <input type="text" name="category" placeholder="Category" required />
+                <button type="submit">Add Expense</button>
+            </form>
+        </section>
+    </main>
 </body>
 </html>

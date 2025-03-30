@@ -1,0 +1,64 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #F4F6F8;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.app-header {
+    background-color: #0A2540;
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo {
+    height: 50px;
+}
+
+.container {
+    max-width: 960px;
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+}
+
+.styled-table th,
+.styled-table td {
+    border: 1px solid #ccc;
+    padding: 0.75rem;
+    text-align: left;
+}
+
+.styled-table th {
+    background-color: #0A2540;
+    color: #fff;
+}
+
+.add-expense-form input {
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    width: calc(100% - 1rem);
+    display: block;
+}
+
+.add-expense-form button {
+    padding: 0.75rem 1.5rem;
+    background-color: #00B388;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.add-expense-form button:hover {
+    background-color: #009e7a;
+}
