@@ -2,66 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>FinTech Expense Tracker</title>
+    <title>Welcome | FinTech Tracker</title>
     <link rel="stylesheet" href="/assets/css/style.css">
-    <style>
-        .landing-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            min-height: 100vh;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 2rem;
-            border-radius: 12px;
-            max-width: 700px;
-            margin: 4rem auto;
-        }
-
-        .landing-container img.logo-main {
-            width: 220px;
-            margin-bottom: 2rem;
-        }
-
-        .landing-container h1 {
-            font-size: 2rem;
-            color: #1E2A38;
-        }
-
-        .landing-container p {
-            font-size: 1.1rem;
-            color: #555;
-            margin-bottom: 2rem;
-        }
-
-        .landing-buttons a {
-            display: inline-block;
-            margin: 0.75rem;
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: white;
-            background-color: #C7A35C;
-            border-radius: 8px;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-        }
-
-        .landing-buttons a:hover {
-            background-color: #A9742C;
-        }
-    </style>
 </head>
 <body>
-    <div class="landing-container">
-        <img src="/assets/images/logo-full.png" alt="FinTech Logo" class="logo-main">
-        <h1>Welcome to FinTech Expense Tracker</h1>
-        <p>Track, analyze and visualize your spending habits with ease.</p>
-        <div class="landing-buttons">
-            <a href="/expenses/dashboard">📊 Dashboard</a>
-            <a href="/expenses">📁 Expense Manager</a>
+    <header class="app-header">
+        <img src="/assets/images/logo-full.png" class="logo" alt="FinTech Logo">
+        <nav class="nav-links">
+            <a href="/expenses/dashboard">Dashboard</a>
+            <a href="/expenses">Expenses</a>
+        </nav>
+    </header>
+
+    <section class="welcome container">
+        <img src="/assets/images/card-preview.png" alt="Card Preview">
+        <h1>Welcome to <span style="color: var(--accent);">FinTech Expense Tracker</span></h1>
+        <p>Track, analyze, and optimize your spending. Safe, smart, and simple.</p>
+        <div>
+            <a href="/expenses/dashboard" class="btn">📊 Dashboard</a>
+            <a href="/expenses" class="btn">💳 Expense Manager</a>
         </div>
-    </div>
+    </section>
 </body>
 </html>

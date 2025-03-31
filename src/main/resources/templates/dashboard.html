@@ -1,109 +1,47 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <title>FinTech | Dashboard</title>
-    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Roboto&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Dashboard | FinTech</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <header class="app-header">
-        <img src="/assets/logo/logo-full.png" alt="FinTech Logo" class="logo" />
-        <h1>FinTech Dashboard</h1>
+        <img src="/assets/images/logo-icon.png" class="logo" alt="Logo">
+        <nav class="nav-links">
+            <a href="/expenses/dashboard">Dashboard</a>
+            <a href="/expenses">Expenses</a>
+        </nav>
     </header>
 
-    <main class="container">
-        <form method="get" th:action="@{/expenses/dashboard}">
-            <label for="cardId">Select Card:</label>
-            <select class="card-selector" name="cardId" required>
-                <option disabled selected>Select a card</option>
-                <option th:each="card : ${cards}"
-                        th:value="${card.id}"
-                        th:text="${card.cardHolderName + ' | ' + card.maskedNumber}"
-                        th:selected="${card.id == selectedCardId}">
-                </option>
+    <div class="container">
+        <h2>Dashboard Overview</h2>
+
+        <form method="get" class="form-group">
+            <label for="cardId">Choose Card:</label>
+            <select name="cardId" id="cardId">
+                <option value="">All Cards</option>
             </select>
-            <button type="submit">View</button>
+            <button type="submit" class="btn">View</button>
         </form>
 
-        <div th:if="${totalSpent != null}">
-            <div th:class="'summary-box ' + 
-                  (${totalSpent} >= (${limit} * 0.9) ? 'danger' : 
-                  (${totalSpent} >= (${limit} * 0.8) ? 'warning' : '') )">
-                <p><strong>Total Spent:</strong> $<span th:text="${totalSpent}">0.00</span></p>
-                <p><strong>Card Limit:</strong> $<span th:text="${limit}">0.00</span></p>
+        <div class="grid-2">
+            <div class="card">
+                <h3>Total Spent</h3>
+                <p>$ {{ totalSpent }}</p>
             </div>
-
-            <table class="styled-table">
-                <thead>
-                    <tr>
-                        <th>Vendor</th>
-                        <th>Amount</th>
-                        <th>Date</th>
-                        <th>Category</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="expense : ${expenses}">
-                        <td th:text="${expense.vendor}">Vendor</td>
-                        <td th:text="${expense.amount}">0.00</td>
-                        <td th:text="${expense.date}">Date</td>
-                        <td th:text="${expense.category}">Category</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div class="dashboard-charts">
-                <canvas id="pieChart"></canvas>
-                <canvas id="barChart"></canvas>
-                <canvas id="lineChart"></canvas>
+            <div class="card">
+                <h3>Credit Limit</h3>
+                <p>$ {{ limit }}</p>
             </div>
         </div>
-    </main>
 
-    <script th:inline="javascript">
-        const categoryData = {
-            labels: [[${categoryLabels}]],
-            datasets: [{
-                data: [[${categoryData}]],
-                backgroundColor: ['#00B388', '#FFC107', '#FF7043', '#6C5CE7', '#74B9FF']
-            }]
-        };
-
-        const vendorData = {
-            labels: [[${vendorLabels}]],
-            datasets: [{
-                label: "Top Vendors",
-                data: [[${vendorTotals}]],
-                backgroundColor: '#0A2540'
-            }]
-        };
-
-        const spendTrendData = {
-            labels: [[${dailyLabels}]],
-            datasets: [{
-                label: "Daily Spend",
-                data: [[${dailyTotals}]],
-                borderColor: "#C7A35C",
-                fill: false,
-                tension: 0.4
-            }]
-        };
-
-        new Chart(document.getElementById("pieChart"), {
-            type: 'pie',
-            data: categoryData
-        });
-
-        new Chart(document.getElementById("barChart"), {
-            type: 'bar',
-            data: vendorData
-        });
-
-        new Chart(document.getElementById("lineChart"), {
-            type: 'line',
-            data: spendTrendData
-        });
-    </script>
+        <div class="dashboard-charts grid-2">
+            <canvas id="categoryChart"></canvas>
+            <canvas id="vendorChart"></canvas>
+            <canvas id="dailyChart"></canvas>
+        </div>
+    </div>
 </body>
 </html>
