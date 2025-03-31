@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/expenses")
 public class ExpenseController {
 
     private final ExpenseService service;
@@ -26,24 +25,30 @@ public class ExpenseController {
         this.chartService = chartService;
     }
 
-    // 📄 Show all expenses for the current month (all cards)
-    @GetMapping
+    // 🏠 Landing page
+    @GetMapping("/")
+    public String home() {
+        return "index"; // maps to src/main/resources/templates/index.html
+    }
+
+    // 📁 Show all expenses for the current month (across all cards)
+    @GetMapping("/expenses")
     public String list(Model model) {
         model.addAttribute("expenses", service.findMonthlyExpenses());
         model.addAttribute("expense", new Expense());
         model.addAttribute("cards", cardRepo.findAll());
-        return "expenses";
+        return "expenses"; // maps to expenses.html
     }
 
     // ➕ Add new expense
-    @PostMapping
+    @PostMapping("/expenses")
     public String addExpense(@ModelAttribute Expense expense) {
         service.save(expense);
         return "redirect:/expenses";
     }
 
     // 📊 Dashboard view with optional card filter
-    @GetMapping("/dashboard")
+    @GetMapping("/expenses/dashboard")
     public String dashboard(@RequestParam(required = false) Long cardId, Model model) {
         List<CreditCard> cards = cardRepo.findAll();
         model.addAttribute("cards", cards);
@@ -70,6 +75,6 @@ public class ExpenseController {
             model.addAttribute("dailyTotals", dailyData.values());
         }
 
-        return "dashboard";
+        return "dashboard"; // maps to dashboard.html
     }
 }

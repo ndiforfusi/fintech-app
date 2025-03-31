@@ -1,15 +1,16 @@
+/* 🌐 Base Styles */
 body {
     font-family: 'Poppins', 'Roboto', sans-serif;
     background-color: #F4F6F8;
     margin: 0;
     padding: 0;
     color: #333;
-    background-image: url('/assets/images/dashboard-bg.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+    background: url('/assets/images/dashboard-bg.jpg') center center / cover no-repeat fixed;
+    min-height: 100vh;
+    line-height: 1.6;
 }
 
+/* 🔝 App Header */
 .app-header {
     background-color: #1E2A38;
     color: white;
@@ -17,33 +18,43 @@ body {
     display: flex;
     align-items: center;
     gap: 1rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .logo {
-    height: 50px;
+    height: 48px;
+    max-width: 200px;
+    width: auto;
 }
 
+/* 📦 Content Container */
 .container {
-    max-width: 960px;
+    max-width: 1140px;
     margin: 2rem auto;
-    padding: 1rem;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
 }
 
+/* 📊 Tables */
 .styled-table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 2rem;
     font-size: 0.95rem;
+    background: white;
+    border-radius: 6px;
+    overflow: hidden;
 }
 
 .styled-table th,
 .styled-table td {
-    border: 1px solid #ddd;
-    padding: 0.75rem;
+    border: 1px solid #eee;
+    padding: 0.85rem 1rem;
     text-align: left;
 }
 
@@ -53,14 +64,15 @@ body {
     font-weight: 600;
 }
 
+/* ➕ Expense Form */
 .add-expense-form input,
 .add-expense-form select {
-    padding: 0.5rem;
+    padding: 0.75rem;
     margin: 0.5rem 0;
     width: 100%;
-    display: block;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 6px;
+    font-size: 1rem;
 }
 
 .add-expense-form button {
@@ -70,7 +82,7 @@ body {
     border: none;
     cursor: pointer;
     font-weight: bold;
-    border-radius: 4px;
+    border-radius: 6px;
     transition: background 0.3s ease;
 }
 
@@ -78,19 +90,25 @@ body {
     background-color: #A9742C;
 }
 
+/* 💳 Card Dropdown */
 .card-selector {
     font-size: 1rem;
-    margin-bottom: 1rem;
-    border-color: #C7A35C;
+    margin-bottom: 1.5rem;
+    border: 1px solid #C7A35C;
+    padding: 0.5rem;
+    border-radius: 6px;
+    background: white;
 }
 
+/* 📦 Summary Boxes */
 .summary-box {
-    padding: 1rem;
-    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
     margin-bottom: 1.5rem;
     border: 1px solid #C7A35C;
     background-color: #fffbe6;
     color: #5a4a1c;
+    font-size: 1rem;
 }
 
 .summary-box.warning {
@@ -103,9 +121,10 @@ body {
     border-color: #dc3545;
 }
 
+/* 📈 Chart Layout */
 .dashboard-charts {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 2rem;
     margin-top: 2rem;
 }
@@ -115,4 +134,19 @@ canvas {
     padding: 1rem;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* 🖼️ Images */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.card-preview img {
+    width: 100%;
+    max-width: 350px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
 }
