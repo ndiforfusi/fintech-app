@@ -54,15 +54,27 @@ body {
 }
 
 /* ========== HEADINGS ========== */
-h2 {
-    font-size: 1.8rem;
+h2,
+.dashboard-title {
+    font-size: 2rem;
     color: #1E2A38;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
 }
 
 h3 {
-    margin: 2rem 0 1rem;
+    margin: 1.5rem 0 0.75rem;
     color: #1E2A38;
+}
+
+/* ========== HERO IMAGE ========== */
+.hero-image {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.hero-image img {
+    width: 180px;
 }
 
 /* ========== DASHBOARD METRICS ========== */
@@ -73,12 +85,22 @@ h3 {
     margin-bottom: 2rem;
 }
 
-.card {
+.dashboard-card {
     background: white;
-    border-left: 5px solid #C7A35C;
+    border-left: 6px solid #C7A35C;
     border-radius: 10px;
     padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-card h3 {
+    color: #1E2A38;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-card p {
+    font-size: 1.25rem;
+    font-weight: bold;
 }
 
 /* ========== TABLES ========== */
@@ -107,7 +129,8 @@ h3 {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 1rem;
-    margin-top: 1rem;
+    margin: 2rem auto;
+    max-width: 600px;
 }
 
 .form-group input,
@@ -116,6 +139,7 @@ h3 {
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 1rem;
+    width: 100%;
 }
 
 .form-group button,
@@ -138,7 +162,7 @@ h3 {
 /* ========== CHARTS ========== */
 .dashboard-charts {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
     margin-top: 2rem;
 }
@@ -146,7 +170,7 @@ h3 {
 canvas {
     background: white;
     padding: 1rem;
-    border-radius: 8px;
+    border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
@@ -158,44 +182,55 @@ canvas {
     justify-content: center;
     text-align: center;
     min-height: 100vh;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 2rem;
+    background: rgba(245, 247, 251, 0.95);
+    padding: 3rem 2rem;
     border-radius: 12px;
-    max-width: 700px;
-    margin: 4rem auto;
+    max-width: 720px;
+    margin: 3rem auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
 }
 
 .landing-container img.logo-main {
-    width: 220px;
+    width: 240px;
     margin-bottom: 2rem;
 }
 
 .landing-container h1 {
-    font-size: 2rem;
+    font-size: 2.4rem;
     color: #1E2A38;
+    margin-bottom: 1rem;
+    font-weight: 600;
 }
 
 .landing-container p {
-    font-size: 1.1rem;
-    color: #555;
+    font-size: 1.15rem;
+    color: #444;
     margin-bottom: 2rem;
+    font-weight: 500;
+}
+
+.landing-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .landing-buttons a {
     display: inline-block;
-    margin: 0.75rem;
-    padding: 1rem 2rem;
-    font-size: 1.1rem;
-    font-weight: bold;
+    padding: 0.9rem 1.8rem;
+    font-size: 1.05rem;
+    font-weight: 600;
     color: white;
     background-color: #C7A35C;
     border-radius: 8px;
     text-decoration: none;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .landing-buttons a:hover {
     background-color: #A9742C;
+    transform: translateY(-2px);
 }
 
 /* ========== FOOTER ========== */
@@ -204,4 +239,11 @@ footer {
     margin-top: 2rem;
     color: #aaa;
     padding: 1rem;
+    font-size: 0.9rem;
+}
+
+footer .copyright {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: #777;
 }

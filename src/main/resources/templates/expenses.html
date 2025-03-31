@@ -18,13 +18,81 @@
             color: #333;
         }
 
-        h2, h3 {
-            color: #1E2A38;
+        .app-header {
+            background-color: #1E2A38;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .form-group {
+        .logo {
+            height: 40px;
+        }
+
+        .nav-links a {
+            color: #C7A35C;
+            font-weight: bold;
+            text-decoration: none;
+            margin-left: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            background-color: rgba(255, 255, 255, 0.97);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .hero-right {
+            text-align: right;
+            margin-bottom: 2rem;
+        }
+
+        .hero-right img {
+            max-width: 420px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        h2.section-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #C7A35C;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        table.styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .styled-table th,
+        .styled-table td {
+            border: 1px solid #ddd;
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        .styled-table th {
+            background-color: #C7A35C;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        form.form-group {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 1rem;
             margin-top: 1rem;
         }
@@ -32,9 +100,9 @@
         .form-group input,
         .form-group select {
             padding: 0.6rem;
+            font-size: 1rem;
             border: 1px solid #ccc;
             border-radius: 6px;
-            font-size: 1rem;
         }
 
         .form-group button {
@@ -42,8 +110,8 @@
             padding: 0.75rem 1.5rem;
             background-color: #C7A35C;
             color: white;
-            border: none;
             font-weight: bold;
+            border: none;
             border-radius: 6px;
             cursor: pointer;
             transition: background-color 0.3s ease;
@@ -61,10 +129,19 @@
             .form-group button {
                 grid-column: span 1;
             }
+
+            .hero-right {
+                text-align: center;
+            }
+
+            .hero-right img {
+                max-width: 90%;
+            }
         }
     </style>
 </head>
 <body>
+
     <header class="app-header">
         <img src="/assets/images/logo-icon.png" class="logo" alt="Logo">
         <nav class="nav-links">
@@ -74,7 +151,12 @@
     </header>
 
     <div class="container">
-        <h2>Monthly Expenses</h2>
+        
+        <div class="hero-right">
+            <img src="/assets/images/expense-cover.png" alt="ExpenseTrack Graphic">
+        </div>
+
+        <h2 class="section-title">Monthly Expenses</h2>
 
         <table class="styled-table">
             <thead>
@@ -87,11 +169,10 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Dynamic rows will be populated by Thymeleaf or backend engine -->
+                <!-- Thymeleaf or JS-based backend rows -->
             </tbody>
         </table>
 
-        <h3>Add New Expense</h3>
         <form method="post" class="form-group">
             <input type="text" name="vendor" placeholder="Vendor" required>
             <input type="number" name="amount" step="0.01" placeholder="Amount" required>
@@ -99,10 +180,12 @@
             <input type="text" name="category" placeholder="Category" required>
             <select name="card" required>
                 <option value="">Select Credit Card</option>
-                <!-- Dynamic credit card options -->
+                <!-- Loop or inject cards here -->
+                <!-- e.g., <option th:each="card : ${cards}" th:value="${card.id}" th:text="${card.maskedNumber}"></option> -->
             </select>
             <button type="submit">Add Expense</button>
         </form>
     </div>
+
 </body>
 </html>
