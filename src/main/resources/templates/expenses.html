@@ -3,7 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <title>Expenses | FinTech</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('/assets/images/dashboard-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #333;
+        }
+
+        h2, h3 {
+            color: #1E2A38;
+        }
+
+        .form-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 0.6rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .form-group button {
+            grid-column: span 2;
+            padding: 0.75rem 1.5rem;
+            background-color: #C7A35C;
+            color: white;
+            border: none;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-group button:hover {
+            background-color: #A9742C;
+        }
+
+        @media (max-width: 600px) {
+            .form-group {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group button {
+                grid-column: span 1;
+            }
+        }
+    </style>
 </head>
 <body>
     <header class="app-header">
@@ -21,18 +80,18 @@
             <thead>
                 <tr>
                     <th>Vendor</th>
-                    <th>Amount</th>
+                    <th>Amount ($)</th>
                     <th>Date</th>
                     <th>Category</th>
                     <th>Card</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Dynamic rows here -->
+                <!-- Dynamic rows will be populated by Thymeleaf or backend engine -->
             </tbody>
         </table>
 
-        <h3>Add Expense</h3>
+        <h3>Add New Expense</h3>
         <form method="post" class="form-group">
             <input type="text" name="vendor" placeholder="Vendor" required>
             <input type="number" name="amount" step="0.01" placeholder="Amount" required>
@@ -40,8 +99,9 @@
             <input type="text" name="category" placeholder="Category" required>
             <select name="card" required>
                 <option value="">Select Credit Card</option>
+                <!-- Dynamic credit card options -->
             </select>
-            <button type="submit" class="btn">Add Expense</button>
+            <button type="submit">Add Expense</button>
         </form>
     </div>
 </body>

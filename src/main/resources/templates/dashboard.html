@@ -3,45 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <title>Dashboard | FinTech</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Styles -->
     <link rel="stylesheet" href="/assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <!-- Header -->
     <header class="app-header">
-        <img src="/assets/images/logo-icon.png" class="logo" alt="Logo">
+        <img src="/assets/images/logo-icon.png" class="logo" alt="FinTech Logo">
         <nav class="nav-links">
-            <a href="/expenses/dashboard">Dashboard</a>
-            <a href="/expenses">Expenses</a>
+            <a href="/expenses/dashboard">📊 Dashboard</a>
+            <a href="/expenses">🧾 Expenses</a>
         </nav>
     </header>
 
+    <!-- Main Content -->
     <div class="container">
-        <h2>Dashboard Overview</h2>
+        <h2 class="dashboard-title">Dashboard Overview</h2>
 
-        <form method="get" class="form-group">
-            <label for="cardId">Choose Card:</label>
+        <!-- Filter Form -->
+        <form method="get" action="/expenses/dashboard" class="form-group">
+            <label for="cardId"><strong>Choose Card:</strong></label>
             <select name="cardId" id="cardId">
                 <option value="">All Cards</option>
+                <!-- Example dynamic cards -->
+                <option value="1" th:selected="${selectedCardId == 1}">Visa - **** 1234</option>
+                <option value="2" th:selected="${selectedCardId == 2}">Mastercard - **** 5678</option>
             </select>
             <button type="submit" class="btn">View</button>
         </form>
 
+        <!-- Dashboard Cards -->
         <div class="grid-2">
-            <div class="card">
+            <div class="dashboard-card">
                 <h3>Total Spent</h3>
-                <p>$ {{ totalSpent }}</p>
+                <p><strong>$</strong> <span th:text="${totalSpent}">0.00</span></p>
             </div>
-            <div class="card">
+            <div class="dashboard-card">
                 <h3>Credit Limit</h3>
-                <p>$ {{ limit }}</p>
+                <p><strong>$</strong> <span th:text="${limit}">0.00</span></p>
             </div>
         </div>
 
-        <div class="dashboard-charts grid-2">
+        <!-- Charts -->
+        <div class="dashboard-charts grid-3">
             <canvas id="categoryChart"></canvas>
             <canvas id="vendorChart"></canvas>
             <canvas id="dailyChart"></canvas>
         </div>
     </div>
+
+    <!-- Chart Scripts -->
+    <script>
+        const categoryLabels = [[${categoryLabels}]];
+        const categoryData = [[${categoryData}]];
+        const vendorLabels = [[${vendorLabels}]];
+        const vendorTotals = [[${vendorTotals}]];
+        const dailyLabels = [[${dailyLabels}]];
+        const dailyTotals = [[${dailyTotals}]];
+
+        const createChart = (ctxId, labels, data, label, bgColor) => {
+            new Chart(document.getElementById(ctxId), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: label,
+                        data: data,
+                        backgroundColor: bgColor
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        };
+
+        document.addEventListener('DOMContentLoaded', function () {
+            createChart('categoryChart', categoryLabels, categoryData, 'Spending by Category', '#C7A35C');
+            createChart('vendorChart', vendorLabels, vendorTotals, 'Top Vendors', '#4CAF50');
+            createChart('dailyChart', dailyLabels, dailyTotals, 'Daily Spend', '#2196F3');
+        });
+    </script>
 </body>
 </html>

@@ -1,166 +1,207 @@
-:root {
-    --primary: #1E2A38;
-    --accent: #C7A35C;
-    --bg: #F9FAFB;
-    --text: #333;
-    --shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
+/* ========== BASE RESET & FONTS ========== */
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
     font-family: 'Poppins', 'Roboto', sans-serif;
-    background-color: var(--bg);
-    margin: 0;
-    color: var(--text);
+    background-color: #f5f7fb;
+    color: #333;
+    background-image: url('/assets/images/dashboard-bg.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    line-height: 1.6;
 }
 
-/* Header & Sidebar */
+/* ========== HEADER NAVIGATION ========== */
 .app-header {
-    background-color: var(--primary);
+    background-color: #1E2A38;
     color: white;
     padding: 1rem 2rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 999;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .logo {
-    height: 48px;
-}
-
-.nav-links {
-    display: flex;
-    gap: 1.5rem;
+    height: 40px;
 }
 
 .nav-links a {
-    color: white;
+    color: #C7A35C;
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 600;
+    margin-left: 1.5rem;
+    transition: all 0.2s ease;
 }
 
 .nav-links a:hover {
     text-decoration: underline;
+    color: #A9742C;
 }
 
-/* Container & Grid */
+/* ========== CONTAINER ========== */
 .container {
     max-width: 1200px;
-    margin: 2rem auto;
-    padding: 1.5rem;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: var(--shadow);
+    margin: 3rem auto;
+    background: rgba(255, 255, 255, 0.98);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
 }
 
+/* ========== HEADINGS ========== */
+h2 {
+    font-size: 1.8rem;
+    color: #1E2A38;
+    margin-bottom: 1.5rem;
+}
+
+h3 {
+    margin: 2rem 0 1rem;
+    color: #1E2A38;
+}
+
+/* ========== DASHBOARD METRICS ========== */
 .grid-2 {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
 }
 
-/* Buttons */
-.btn {
-    background: var(--accent);
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border: none;
-    font-weight: 600;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 0.3s ease;
-    text-decoration: none;
-    display: inline-block;
-    margin: 0.5rem 0;
-}
-
-.btn:hover {
-    background: #a9742c;
-}
-
-/* Cards */
 .card {
-    padding: 1rem;
     background: white;
+    border-left: 5px solid #C7A35C;
     border-radius: 10px;
-    box-shadow: var(--shadow);
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-/* Charts */
-canvas {
-    background: #fff;
-    border-radius: 8px;
-    padding: 1rem;
-    box-shadow: var(--shadow);
-}
-
-/* Table */
+/* ========== TABLES ========== */
 .styled-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.95rem;
-    margin-top: 1rem;
+    margin-bottom: 2rem;
 }
 
 .styled-table th,
 .styled-table td {
+    border: 1px solid #ddd;
     padding: 0.75rem;
     text-align: left;
-    border: 1px solid #e0e0e0;
 }
 
 .styled-table th {
-    background-color: var(--accent);
+    background-color: #C7A35C;
     color: white;
+    font-weight: bold;
 }
 
+/* ========== FORM FIELDS ========== */
 .form-group {
-    margin-bottom: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
 }
 
-input,
-select {
-    padding: 0.5rem;
+.form-group input,
+.form-group select {
+    padding: 0.6rem;
     border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 100%;
+    border-radius: 6px;
+    font-size: 1rem;
 }
 
-/* Welcome page */
-.welcome {
+.form-group button,
+.btn {
+    padding: 0.75rem 1.5rem;
+    background-color: #C7A35C;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover,
+.form-group button:hover {
+    background-color: #A9742C;
+}
+
+/* ========== CHARTS ========== */
+.dashboard-charts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+canvas {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* ========== LANDING PAGE ========== */
+.landing-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    margin-top: 5rem;
+    min-height: 100vh;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 700px;
+    margin: 4rem auto;
 }
 
-.welcome img {
-    max-width: 200px;
+.landing-container img.logo-main {
+    width: 220px;
     margin-bottom: 2rem;
 }
 
-.welcome h1 {
+.landing-container h1 {
     font-size: 2rem;
-    margin-bottom: 0.5rem;
+    color: #1E2A38;
 }
 
-.welcome p {
-    font-size: 1rem;
-    color: #666;
+.landing-container p {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 2rem;
 }
 
-/* Mobile */
-@media (max-width: 768px) {
-    .nav-links {
-        flex-direction: column;
-    }
+.landing-buttons a {
+    display: inline-block;
+    margin: 0.75rem;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: white;
+    background-color: #C7A35C;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
 
-    .container {
-        margin: 1rem;
-        padding: 1rem;
-    }
+.landing-buttons a:hover {
+    background-color: #A9742C;
+}
+
+/* ========== FOOTER ========== */
+footer {
+    text-align: center;
+    margin-top: 2rem;
+    color: #aaa;
+    padding: 1rem;
 }
