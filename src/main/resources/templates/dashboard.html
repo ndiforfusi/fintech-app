@@ -4,201 +4,190 @@
     <meta charset="UTF-8">
     <title>Dashboard | FinTech</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- Styles & Fonts -->
+
+    <!-- Fonts & Styles -->
     <link rel="stylesheet" href="/assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-image: url('/assets/images/dashboard-bg.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: #333;
+        .logo {
+            height: 60px;
         }
 
-        .hero-image {
-            text-align: center;
-            margin: 2rem 0;
-        }
-
-        .hero-image img {
-            width: 180px;
-        }
-
-        .dashboard-title {
-            text-align: center;
-            color: #1E2A38;
-            margin-bottom: 2rem;
-            font-size: 2rem;
-        }
-
-        .form-group {
-            max-width: 400px;
-            margin: 0 auto 2rem;
-            display: flex;
+        .form-labels {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
             gap: 1rem;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .form-group select, .form-group button {
-            padding: 0.5rem 1rem;
-            font-size: 1rem;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-        }
-
-        .form-group button {
-            background-color: #C7A35C;
-            color: white;
             font-weight: 600;
-            border: none;
-            transition: background-color 0.3s ease;
-            cursor: pointer;
+            color: #fff;
+            background-color: #C7A35C;
+            padding: 0.75rem 1rem;
+            border-radius: 6px 6px 0 0;
+            text-align: left;
         }
 
-        .form-group button:hover {
+        .dashboard-form-table {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 1rem;
+            margin: 1rem 0 2rem;
+        }
+
+        .dashboard-form-table input,
+        .dashboard-form-table select {
+            width: 100%;
+            padding: 0.6rem;
+            font-size: 0.95rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        .dashboard-form-table button {
+            grid-column: span 6;
+            background-color: #C7A35C;
+            color: #fff;
+            font-weight: bold;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .dashboard-form-table button:hover {
             background-color: #A9742C;
         }
 
-        .grid-2 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .dashboard-card {
-            background: white;
-            padding: 1.25rem;
-            border-radius: 10px;
-            border-left: 6px solid #C7A35C;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-
-        .dashboard-card h3 {
-            margin-bottom: 0.5rem;
-            color: #1E2A38;
-        }
-
-        .dashboard-card p {
-            font-size: 1.25rem;
+        .nav-links a {
+            color: #C7A35C;
             font-weight: bold;
+            margin-left: 1.5rem;
+            font-size: 1.1rem;
+            text-decoration: none;
         }
 
-        .dashboard-charts {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+        .nav-links a:hover {
+            color: #A9742C;
         }
 
-        canvas {
-            background: white;
-            padding: 1rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
+        @media (max-width: 768px) {
+            .form-labels,
+            .dashboard-form-table {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-form-table button {
+                grid-column: span 1;
+            }
+
+            .logo {
+                height: 50px;
+            }
+
+            .nav-links {
+                text-align: center;
+                margin-top: 1rem;
+            }
+
+            .nav-links a {
+                display: block;
+                margin: 0.5rem 0;
+            }
         }
     </style>
 </head>
+
 <body>
+<header class="app-header">
+    <img src="/assets/images/logo-icon.png" class="logo" alt="FinTech Logo">
+    <nav class="nav-links">
+        <a href="/">🏠 Home</a>
+        <a href="/expenses/dashboard">📈 Dashboard</a>
+        <a href="/expenses">🧾 Expenses</a>
+        <a href="/cards/new">💳 Add Card</a>
+    </nav>
+</header>
 
-    <!-- Header -->
-    <header class="app-header">
-        <img src="/assets/images/logo-icon.png" class="logo" alt="FinTech Logo">
-        <nav class="nav-links">
-            <a href="/expenses/dashboard">📊 Dashboard</a>
-            <a href="/expenses">🧾 Expenses</a>
-        </nav>
-    </header>
+<div class="container">
+    <h2 class="dashboard-title">Monthly Expenses</h2>
 
-    <!-- Card Hero -->
-    <div class="hero-image">
-        <img src="/assets/images/card-preview.png" alt="Card Image">
+    <!-- Form Labels -->
+    <div class="form-labels">
+        <div>Vendor</div>
+        <div>Amount ($)</div>
+        <div>Date</div>
+        <div>Category</div>
+        <div>Card</div>
+        <div></div>
     </div>
 
-    <!-- Content -->
-    <div class="container">
-        <h2 class="dashboard-title">Dashboard Overview</h2>
+    <!-- Form Inputs -->
+    <form method="post" class="dashboard-form-table">
+        <input type="text" name="vendor" placeholder="Vendor" required>
+        <input type="number" name="amount" step="0.01" placeholder="Amount" required>
+        <input type="date" name="date" required>
+        <input type="text" name="category" placeholder="Category" required>
+        <select name="card" required>
+            <option value="">Select Credit Card</option>
+            <!-- 🪪 Dynamically populated credit cards -->
+        </select>
+        <button type="submit">Add Expense</button>
+    </form>
 
-        <!-- Filter Form -->
-        <form method="get" action="/expenses/dashboard" class="form-group">
-            <select name="cardId" id="cardId">
-                <option value="">All Cards</option>
-                <option value="1" th:selected="${selectedCardId == 1}">Visa - **** 1234</option>
-                <option value="2" th:selected="${selectedCardId == 2}">Mastercard - **** 5678</option>
-            </select>
-            <button type="submit">View</button>
-        </form>
-
-        <!-- Summary Cards -->
-        <div class="grid-2">
-            <div class="dashboard-card">
-                <h3>Total Spent</h3>
-                <p>$ <span th:text="${totalSpent}">0.00</span></p>
-            </div>
-            <div class="dashboard-card">
-                <h3>Credit Limit</h3>
-                <p>$ <span th:text="${limit}">0.00</span></p>
-            </div>
-        </div>
-
-        <!-- Chart Grid -->
-        <div class="dashboard-charts">
-            <canvas id="categoryChart" height="300"></canvas>
-            <canvas id="vendorChart" height="300"></canvas>
-            <canvas id="dailyChart" height="300"></canvas>
-        </div>
+    <!-- Charts Section -->
+    <div class="dashboard-charts grid-3">
+        <canvas id="categoryChart"></canvas>
+        <canvas id="vendorChart"></canvas>
+        <canvas id="dailyChart"></canvas>
     </div>
+</div>
 
-    <!-- Chart Logic -->
-    <script>
-        const categoryLabels = [[${categoryLabels}]];
-        const categoryData = [[${categoryData}]];
-        const vendorLabels = [[${vendorLabels}]];
-        const vendorTotals = [[${vendorTotals}]];
-        const dailyLabels = [[${dailyLabels}]];
-        const dailyTotals = [[${dailyTotals}]];
+<!-- Chart Data Script -->
+<script>
+    const categoryLabels = [[${categoryLabels}]];
+    const categoryData = [[${categoryData}]];
+    const vendorLabels = [[${vendorLabels}]];
+    const vendorTotals = [[${vendorTotals}]];
+    const dailyLabels = [[${dailyLabels}]];
+    const dailyTotals = [[${dailyTotals}]];
 
-        const createChart = (ctxId, labels, data, label, bgColor) => {
-            new Chart(document.getElementById(ctxId), {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: label,
-                        data: data,
-                        backgroundColor: bgColor
-                    }]
+    const createChart = (ctxId, labels, data, label, bgColor) => {
+        new Chart(document.getElementById(ctxId), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: label,
+                    data: data,
+                    backgroundColor: bgColor
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
+                scales: {
+                    y: {
+                        beginAtZero: true
                     }
                 }
-            });
-        };
-
-        document.addEventListener('DOMContentLoaded', function () {
-            createChart('categoryChart', categoryLabels, categoryData, 'Spending by Category', '#C7A35C');
-            createChart('vendorChart', vendorLabels, vendorTotals, 'Top Vendors', '#4CAF50');
-            createChart('dailyChart', dailyLabels, dailyTotals, 'Daily Spend', '#2196F3');
+            }
         });
-    </script>
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        createChart('categoryChart', categoryLabels, categoryData, 'Spending by Category', '#C7A35C');
+        createChart('vendorChart', vendorLabels, vendorTotals, 'Top Vendors', '#4CAF50');
+        createChart('dailyChart', dailyLabels, dailyTotals, 'Daily Spend', '#2196F3');
+    });
+</script>
+
 </body>
 </html>

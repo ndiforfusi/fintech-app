@@ -3,8 +3,8 @@ package com.fintech.app.controller;
 import com.fintech.app.entity.CreditCard;
 import com.fintech.app.entity.Expense;
 import com.fintech.app.repository.CreditCardRepository;
-import com.fintech.app.service.ExpenseService;
 import com.fintech.app.service.ChartService;
+import com.fintech.app.service.ExpenseService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,53 +15,62 @@ import java.util.Map;
 @Controller
 public class ExpenseController {
 
-    private final ExpenseService service;
+    private final ExpenseService expenseService;
     private final CreditCardRepository cardRepo;
     private final ChartService chartService;
 
-    public ExpenseController(ExpenseService service, CreditCardRepository cardRepo, ChartService chartService) {
-        this.service = service;
+    public ExpenseController(ExpenseService expenseService, CreditCardRepository cardRepo, ChartService chartService) {
+        this.expenseService = expenseService;
         this.cardRepo = cardRepo;
         this.chartService = chartService;
     }
 
-    // 🏠 Landing page
+    // 🏠 Landing Page
     @GetMapping("/")
     public String home() {
-        return "index"; // maps to src/main/resources/templates/index.html
+        return "index"; // maps to templates/index.html
     }
 
-    // 📁 Show all expenses for the current month (across all cards)
+    // 📁 Expense List
     @GetMapping("/expenses")
-    public String list(Model model) {
-        model.addAttribute("expenses", service.findMonthlyExpenses());
-        model.addAttribute("expense", new Expense());
-        model.addAttribute("cards", cardRepo.findAll());
-        return "expenses"; // maps to expenses.html
+    public String listExpenses(Model model) {
+        List<Expense> expenses = expenseService.findMonthlyExpenses();
+        List<CreditCard> cards = cardRepo.findAll();
+
+        model.addAttribute("expenses", expenses);
+        model.addAttribute("expense", new Expense()); // form binding
+        model.addAttribute("cards", cards);
+
+        return "expenses"; // maps to templates/expenses.html
     }
 
-    // ➕ Add new expense
+    // ➕ Save New Expense
     @PostMapping("/expenses")
     public String addExpense(@ModelAttribute Expense expense) {
-        service.save(expense);
+        // Make sure the selected card is resolved from ID before saving
+        if (expense.getCard() != null && expense.getCard().getId() != null) {
+            cardRepo.findById(expense.getCard().getId()).ifPresent(expense::setCard);
+        }
+
+        expenseService.save(expense);
         return "redirect:/expenses";
     }
 
-    // 📊 Dashboard view with optional card filter
+    // 📊 Dashboard Page
     @GetMapping("/expenses/dashboard")
     public String dashboard(@RequestParam(required = false) Long cardId, Model model) {
         List<CreditCard> cards = cardRepo.findAll();
         model.addAttribute("cards", cards);
 
         if (cardId != null) {
-            model.addAttribute("expenses", service.findExpensesByCardIdThisMonth(cardId));
-            model.addAttribute("totalSpent", service.calculateTotalForCardThisMonth(cardId));
             model.addAttribute("selectedCardId", cardId);
+            model.addAttribute("expenses", expenseService.findExpensesByCardIdThisMonth(cardId));
+            model.addAttribute("totalSpent", expenseService.calculateTotalForCardThisMonth(cardId));
 
-            CreditCard card = cardRepo.findById(cardId).orElse(null);
-            model.addAttribute("limit", card != null ? card.getCreditLimit() : 0);
+            CreditCard selectedCard = cardRepo.findById(cardId).orElse(null);
+            model.addAttribute("limit", selectedCard != null ? selectedCard.getCreditLimit() : 0.0);
 
-            // 📊 Inject chart data
+            // 📊 Chart Data
             Map<String, Double> categoryData = chartService.getCategoryTotals(cardId);
             model.addAttribute("categoryLabels", categoryData.keySet());
             model.addAttribute("categoryData", categoryData.values());
@@ -75,6 +84,6 @@ public class ExpenseController {
             model.addAttribute("dailyTotals", dailyData.values());
         }
 
-        return "dashboard"; // maps to dashboard.html
+        return "dashboard"; // maps to templates/dashboard.html
     }
 }

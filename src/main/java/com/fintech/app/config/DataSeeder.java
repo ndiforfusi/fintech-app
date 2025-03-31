@@ -23,32 +23,37 @@ public class DataSeeder {
     @PostConstruct
     public void seed() {
         if (creditCardRepo.count() == 0) {
-            CreditCard card1 = new CreditCard();
-            card1.setCardHolderName("Alex Johnson");
-            card1.setCardType("Visa");
-            card1.setCreditLimit(5000.0);
-            card1.setMaskedNumber("**** **** **** 1234");
-            card1.setExpiry(LocalDate.of(2026, 12, 31));
-            creditCardRepo.save(card1);
+            // 🟦 Visa Card
+            CreditCard visa = new CreditCard();
+            visa.setCardHolderName("Alex Johnson");
+            visa.setCardType("Visa");
+            visa.setCreditLimit(5000.0);
+            visa.setMaskedNumber("**** **** **** 1234");
+            visa.setExpiry(LocalDate.of(2026, 12, 31));
+            creditCardRepo.save(visa);
 
-            CreditCard card2 = new CreditCard();
-            card2.setCardHolderName("Maria Gomez");
-            card2.setCardType("MasterCard");
-            card2.setCreditLimit(7500.0);
-            card2.setMaskedNumber("**** **** **** 5678");
-            card2.setExpiry(LocalDate.of(2025, 9, 30));
-            creditCardRepo.save(card2);
+            // 🟥 MasterCard
+            CreditCard masterCard = new CreditCard();
+            masterCard.setCardHolderName("Maria Gomez");
+            masterCard.setCardType("MasterCard");
+            masterCard.setCreditLimit(7500.0);
+            masterCard.setMaskedNumber("**** **** **** 5678");
+            masterCard.setExpiry(LocalDate.of(2025, 9, 30));
+            creditCardRepo.save(masterCard);
 
+            // 🛒 Sample Expense on Visa
             Expense expense = new Expense();
+            expense.setVendor("Whole Foods");
             expense.setAmount(85.25);
             expense.setCategory("Groceries");
-            expense.setVendor("Whole Foods");
             expense.setDate(LocalDate.now().minusDays(2));
-            expense.setCard(card1);
+            expense.setCard(visa);
 
             expenseService.save(expense);
 
-            System.out.println("✅ Sample data seeded: 2 cards + 1 expense");
+            System.out.println("✅ Sample data seeded: 2 credit cards and 1 expense added.");
+        } else {
+            System.out.println("ℹ️ Data already exists. Skipping seeding.");
         }
     }
 }

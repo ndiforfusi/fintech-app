@@ -1,9 +1,8 @@
 package com.fintech.app;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import jakarta.annotation.PostConstruct; // ✅ Updated import
 
 @SpringBootApplication
 public class FintechApplication {
@@ -15,7 +14,8 @@ public class FintechApplication {
 
     @PostConstruct
     public void init() {
-        // 🔧 You can add initial seed logic here (e.g. default cards or demo data)
-        System.out.println("✅ Initialization complete.");
+        // ✅ Application initialization hook
+        // You can trigger configuration setup or log environment status here
+        System.out.println("✅ Initialization complete. Ready to serve requests.");
     }
 }

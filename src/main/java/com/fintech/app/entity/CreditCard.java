@@ -10,12 +10,20 @@ public class CreditCard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String cardHolderName;
+
+    @Column(nullable = false)
     private String maskedNumber;
+
+    @Column(nullable = false)
     private String cardType;
+
+    @Column(nullable = false)
     private LocalDate expiry;
 
-    private double creditLimit; // 💳 NEW field for card spending limit
+    @Column(nullable = false)
+    private double creditLimit; // 💳 Spending cap for card
 
     // ====== Getters and Setters ======
 
