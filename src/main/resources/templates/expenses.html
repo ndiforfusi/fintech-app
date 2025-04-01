@@ -27,7 +27,7 @@
         }
 
         .top-logo img {
-            width: 100px;
+            width: 80px;
         }
 
         .nav-center {
@@ -132,12 +132,12 @@
 </head>
 <body>
 
-    <!-- Centered Top Logo -->
+    <!-- Top Logo -->
     <div class="top-logo">
         <img src="/assets/images/logo-icon.png" alt="FinTech Logo">
     </div>
 
-    <!-- Navigation Links -->
+    <!-- Navigation -->
     <div class="nav-center">
         <a href="/">🏠 Home</a>
         <a href="/expenses/dashboard">📊 Dashboard</a>
@@ -145,11 +145,11 @@
         <a href="/cards/new">💳 Add Credit Card</a>
     </div>
 
-    <!-- Content Section -->
+    <!-- Main Container -->
     <div class="container">
         <h2>Monthly Expenses</h2>
 
-        <!-- Expense Table -->
+        <!-- Expenses Table -->
         <table class="styled-table">
             <thead>
                 <tr>
@@ -171,7 +171,7 @@
             </tbody>
         </table>
 
-        <!-- Add Expense Form -->
+        <!-- Add New Expense Form -->
         <form method="post" th:object="${expense}" class="form-group">
             <input type="text" th:field="*{vendor}" placeholder="Vendor" required>
             <input type="number" th:field="*{amount}" step="0.01" placeholder="Amount" required>

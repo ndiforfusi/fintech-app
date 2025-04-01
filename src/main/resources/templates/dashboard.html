@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Dashboard | FinTech</title>
@@ -11,8 +11,54 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('/assets/images/dashboard-bg.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            color: #333;
+        }
+
+        .app-header {
+            background-color: #1E2A38;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+        }
+
         .logo {
-            height: 60px;
+            height: 80px;
+        }
+
+        .nav-links a {
+            color: #C7A35C;
+            font-weight: bold;
+            margin-left: 1.5rem;
+            font-size: 1.1rem;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover {
+            color: #A9742C;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: rgba(255, 255, 255, 0.96);
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h2.dashboard-title {
+            text-align: center;
+            font-size: 1.8rem;
+            color: #A9742C;
+            margin-bottom: 2rem;
         }
 
         .form-labels {
@@ -61,16 +107,17 @@
             background-color: #A9742C;
         }
 
-        .nav-links a {
-            color: #C7A35C;
-            font-weight: bold;
-            margin-left: 1.5rem;
-            font-size: 1.1rem;
-            text-decoration: none;
+        .dashboard-charts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
         }
 
-        .nav-links a:hover {
-            color: #A9742C;
+        canvas {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
         }
 
         @media (max-width: 768px) {
@@ -83,10 +130,6 @@
                 grid-column: span 1;
             }
 
-            .logo {
-                height: 50px;
-            }
-
             .nav-links {
                 text-align: center;
                 margin-top: 1rem;
@@ -96,11 +139,16 @@
                 display: block;
                 margin: 0.5rem 0;
             }
+
+            .logo {
+                height: 60px;
+            }
         }
     </style>
 </head>
 
 <body>
+
 <header class="app-header">
     <img src="/assets/images/logo-icon.png" class="logo" alt="FinTech Logo">
     <nav class="nav-links">
@@ -114,7 +162,7 @@
 <div class="container">
     <h2 class="dashboard-title">Monthly Expenses</h2>
 
-    <!-- Form Labels -->
+    <!-- Form Headers -->
     <div class="form-labels">
         <div>Vendor</div>
         <div>Amount ($)</div>
@@ -132,20 +180,20 @@
         <input type="text" name="category" placeholder="Category" required>
         <select name="card" required>
             <option value="">Select Credit Card</option>
-            <!-- 🪪 Dynamically populated credit cards -->
+            <!-- 🪪 Cards dynamically populated -->
         </select>
         <button type="submit">Add Expense</button>
     </form>
 
-    <!-- Charts Section -->
-    <div class="dashboard-charts grid-3">
+    <!-- Charts -->
+    <div class="dashboard-charts">
         <canvas id="categoryChart"></canvas>
         <canvas id="vendorChart"></canvas>
         <canvas id="dailyChart"></canvas>
     </div>
 </div>
 
-<!-- Chart Data Script -->
+<!-- Chart.js Logic -->
 <script>
     const categoryLabels = [[${categoryLabels}]];
     const categoryData = [[${categoryData}]];
@@ -169,14 +217,10 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        display: false
-                    }
+                    legend: { display: false }
                 },
                 scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+                    y: { beginAtZero: true }
                 }
             }
         });
