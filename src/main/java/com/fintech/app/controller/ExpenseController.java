@@ -62,7 +62,7 @@ public class ExpenseController {
     public String dashboard(@RequestParam(required = false) Long cardId, Model model) {
         List<CreditCard> cards = cardRepo.findAll();
         model.addAttribute("cards", cards);
-        model.addAttribute("expense", new Expense()); // ✅ Required for form binding in dashboard.html
+        model.addAttribute("expense", new Expense()); // ✅ Needed for form binding
 
         if (cardId != null) {
             model.addAttribute("selectedCardId", cardId);
@@ -85,7 +85,7 @@ public class ExpenseController {
             model.addAttribute("dailyLabels", dailyData.keySet());
             model.addAttribute("dailyTotals", dailyData.values());
         } else {
-            // Ensure empty lists to prevent Thymeleaf error on first load
+            // 👇 Prevent Thymeleaf binding errors when no card selected
             model.addAttribute("expenses", List.of());
             model.addAttribute("totalSpent", 0.0);
             model.addAttribute("limit", 0.0);

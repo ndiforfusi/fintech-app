@@ -28,7 +28,7 @@
     }
 
     .logo {
-      height: 100px; /* ⬆️ Updated size */
+      height: 100px;
     }
 
     .nav-links a {
@@ -52,7 +52,7 @@
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
     }
 
-    h2.dashboard-title {
+    .dashboard-title {
       text-align: center;
       font-size: 1.8rem;
       color: #A9742C;
@@ -80,7 +80,6 @@
 
     .dashboard-form-table input,
     .dashboard-form-table select {
-      width: 100%;
       padding: 0.6rem;
       font-size: 0.95rem;
       border: 1px solid #ccc;
@@ -89,10 +88,10 @@
 
     .dashboard-form-table button {
       grid-column: span 6;
+      padding: 0.75rem;
       background-color: #C7A35C;
       color: white;
       font-weight: bold;
-      padding: 0.75rem;
       border: none;
       border-radius: 6px;
       cursor: pointer;
@@ -117,8 +116,7 @@
     }
 
     @media (max-width: 768px) {
-      .form-labels,
-      .dashboard-form-table {
+      .form-labels, .dashboard-form-table {
         grid-template-columns: 1fr;
       }
 
@@ -126,19 +124,13 @@
         grid-column: span 1;
       }
 
-      .nav-links {
-        flex-direction: column;
-        align-items: flex-end;
-        margin-top: 1rem;
+      .logo {
+        height: 70px;
       }
 
       .nav-links a {
         display: block;
         margin: 0.5rem 0;
-      }
-
-      .logo {
-        height: 70px;
       }
     }
   </style>
@@ -159,7 +151,6 @@
 <div class="container">
   <h2 class="dashboard-title">Monthly Expenses</h2>
 
-  <!-- Form Header -->
   <div class="form-labels">
     <div>Vendor</div>
     <div>Amount ($)</div>
@@ -169,7 +160,7 @@
     <div></div>
   </div>
 
-  <!-- Form -->
+  <!-- ✅ Fixes binding error by using th:object -->
   <form method="post" th:object="${expense}" class="dashboard-form-table">
     <input type="text" th:field="*{vendor}" placeholder="Vendor" required>
     <input type="number" th:field="*{amount}" step="0.01" placeholder="Amount" required>
@@ -182,7 +173,6 @@
     <button type="submit">Add Expense</button>
   </form>
 
-  <!-- Charts -->
   <div class="dashboard-charts">
     <canvas id="categoryChart"></canvas>
     <canvas id="vendorChart"></canvas>
@@ -190,8 +180,8 @@
   </div>
 </div>
 
-<!-- Chart.js Render -->
-<script>
+<!-- ✅ Wrap JS expressions in [[...]] safely -->
+<script th:inline="javascript">
   const categoryLabels = [[${categoryLabels}]];
   const categoryData = [[${categoryData}]];
   const vendorLabels = [[${vendorLabels}]];
