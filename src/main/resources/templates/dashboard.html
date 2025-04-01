@@ -60,7 +60,6 @@
     }
 
     .form-labels {
-      width: 100%;
       display: grid;
       grid-template-columns: repeat(6, 1fr);
       gap: 1rem;
@@ -84,6 +83,7 @@
       font-size: 0.95rem;
       border: 1px solid #ccc;
       border-radius: 6px;
+      width: 100%;
     }
 
     .dashboard-form-table button {
@@ -102,17 +102,31 @@
       background-color: #A9742C;
     }
 
-    .dashboard-charts {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
+    .dashboard-charts-wrapper {
+      overflow-x: auto;
+      margin-top: 2rem;
     }
 
-    canvas {
+    .dashboard-charts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+    }
+
+    .chart-container {
+      flex: 1 1 300px;
+      min-width: 300px;
+      max-width: 100%;
       background: white;
       border-radius: 8px;
       padding: 1rem;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    canvas {
+      width: 100% !important;
+      height: 250px !important;
     }
 
     @media (max-width: 768px) {
@@ -151,6 +165,7 @@
 <div class="container">
   <h2 class="dashboard-title">Monthly Expenses</h2>
 
+  <!-- Header Row -->
   <div class="form-labels">
     <div>Vendor</div>
     <div>Amount ($)</div>
@@ -160,7 +175,7 @@
     <div></div>
   </div>
 
-  <!-- ✅ Fixes binding error by using th:object -->
+  <!-- Form -->
   <form method="post" th:object="${expense}" class="dashboard-form-table">
     <input type="text" th:field="*{vendor}" placeholder="Vendor" required>
     <input type="number" th:field="*{amount}" step="0.01" placeholder="Amount" required>
@@ -173,48 +188,122 @@
     <button type="submit">Add Expense</button>
   </form>
 
-  <div class="dashboard-charts">
-    <canvas id="categoryChart"></canvas>
-    <canvas id="vendorChart"></canvas>
-    <canvas id="dailyChart"></canvas>
+  <!-- Charts -->
+  <div class="dashboard-charts-wrapper">
+    <div class="dashboard-charts">
+
+      <!-- Chart Card Template (Repeated) -->
+      <div class="chart-container">
+        <div style="text-align:right;">
+          <select onchange="toggleChartType('categoryChart', this)">
+            <option value="bar">Bar</option>
+            <option value="pie">Pie</option>
+          </select>
+          <button onclick="downloadChart('categoryChart')">📥 PNG</button>
+        </div>
+        <canvas id="categoryChart"></canvas>
+      </div>
+
+      <div class="chart-container">
+        <div style="text-align:right;">
+          <select onchange="toggleChartType('vendorChart', this)">
+            <option value="bar">Bar</option>
+            <option value="pie">Pie</option>
+          </select>
+          <button onclick="downloadChart('vendorChart')">📥 PNG</button>
+        </div>
+        <canvas id="vendorChart"></canvas>
+      </div>
+
+      <div class="chart-container">
+        <div style="text-align:right;">
+          <select onchange="toggleChartType('dailyChart', this)">
+            <option value="bar">Bar</option>
+            <option value="pie">Pie</option>
+          </select>
+          <button onclick="downloadChart('dailyChart')">📥 PNG</button>
+        </div>
+        <canvas id="dailyChart"></canvas>
+      </div>
+
+    </div>
   </div>
 </div>
 
-<!-- ✅ Wrap JS expressions in [[...]] safely -->
+<!-- 🧠 Chart.js & Toggles -->
 <script th:inline="javascript">
-  const categoryLabels = [[${categoryLabels}]];
-  const categoryData = [[${categoryData}]];
-  const vendorLabels = [[${vendorLabels}]];
-  const vendorTotals = [[${vendorTotals}]];
-  const dailyLabels = [[${dailyLabels}]];
-  const dailyTotals = [[${dailyTotals}]];
+  const chartInstances = {};
 
-  const createChart = (id, labels, data, label, color) => {
-    new Chart(document.getElementById(id), {
-      type: 'bar',
+  const chartDataConfig = {
+    categoryChart: {
+      labels: [[${categoryLabels}]],
+      data: [[${categoryData}]],
+      label: 'Spending by Category',
+      color: '#C7A35C'
+    },
+    vendorChart: {
+      labels: [[${vendorLabels}]],
+      data: [[${vendorTotals}]],
+      label: 'Top Vendors',
+      color: '#4CAF50'
+    },
+    dailyChart: {
+      labels: [[${dailyLabels}]],
+      data: [[${dailyTotals}]],
+      label: 'Daily Spend',
+      color: '#2196F3'
+    }
+  };
+
+  const createChart = (id, type) => {
+    const ctx = document.getElementById(id).getContext('2d');
+    const cfg = chartDataConfig[id];
+
+    if (chartInstances[id]) {
+      chartInstances[id].destroy();
+    }
+
+    chartInstances[id] = new Chart(ctx, {
+      type: type,
       data: {
-        labels: labels,
+        labels: cfg.labels,
         datasets: [{
-          label: label,
-          data: data,
-          backgroundColor: color
+          label: cfg.label,
+          data: cfg.data,
+          backgroundColor: type === 'pie' ? cfg.labels.map(() => cfg.color) : cfg.color
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: { legend: { display: false }},
-        scales: { y: { beginAtZero: true }}
+        plugins: { legend: { display: type === 'pie' } },
+        scales: type === 'bar' ? {
+          y: { beginAtZero: true }
+        } : {}
       }
     });
   };
 
+  const toggleChartType = (id, selectEl) => {
+    const newType = selectEl.value;
+    createChart(id, newType);
+  };
+
+  const downloadChart = (id) => {
+    const chart = chartInstances[id];
+    const link = document.createElement('a');
+    link.href = chart.toBase64Image();
+    link.download = `${id}.png`;
+    link.click();
+  };
+
   document.addEventListener('DOMContentLoaded', () => {
-    createChart('categoryChart', categoryLabels, categoryData, 'Spending by Category', '#C7A35C');
-    createChart('vendorChart', vendorLabels, vendorTotals, 'Top Vendors', '#4CAF50');
-    createChart('dailyChart', dailyLabels, dailyTotals, 'Daily Spend', '#2196F3');
+    createChart('categoryChart', 'bar');
+    createChart('vendorChart', 'bar');
+    createChart('dailyChart', 'bar');
   });
 </script>
 
 </body>
+
 </html>
