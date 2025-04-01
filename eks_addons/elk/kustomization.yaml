@@ -1,0 +1,4 @@
+resources:
+- storage-class.yaml
+- fluentd-config.yaml
+- elastic-stack.yaml
