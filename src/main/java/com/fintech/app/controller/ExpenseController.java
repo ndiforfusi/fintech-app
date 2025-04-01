@@ -5,11 +5,11 @@ import com.fintech.app.entity.Expense;
 import com.fintech.app.repository.CreditCardRepository;
 import com.fintech.app.service.ChartService;
 import com.fintech.app.service.ExpenseService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -31,7 +31,7 @@ public class ExpenseController {
     // 🏠 Landing Page
     @GetMapping("/")
     public String home() {
-        return "index"; // maps to templates/index.html
+        return "index";
     }
 
     // 📁 Expense List
@@ -41,24 +41,23 @@ public class ExpenseController {
         List<CreditCard> cards = cardRepo.findAll();
 
         model.addAttribute("expenses", expenses);
-        model.addAttribute("expense", new Expense()); // form binding
+        model.addAttribute("expense", new Expense());
         model.addAttribute("cards", cards);
 
-        return "expenses"; // maps to templates/expenses.html
+        return "expenses";
     }
 
-    // ➕ Save New Expense
+    // ➕ Add Expense
     @PostMapping("/expenses")
     public String addExpense(@ModelAttribute Expense expense) {
         if (expense.getCard() != null && expense.getCard().getId() != null) {
             cardRepo.findById(expense.getCard().getId()).ifPresent(expense::setCard);
         }
-
         expenseService.save(expense);
         return "redirect:/expenses";
     }
 
-    // 📊 Dashboard Page
+    // 📊 Dashboard View
     @GetMapping("/expenses/dashboard")
     public String dashboard(@RequestParam(required = false) Long cardId, Model model) {
         List<CreditCard> cards = cardRepo.findAll();
@@ -72,7 +71,7 @@ public class ExpenseController {
             CreditCard selectedCard = cardRepo.findById(cardId).orElse(null);
             model.addAttribute("limit", selectedCard != null ? selectedCard.getCreditLimit() : 0.0);
 
-            // 📊 Chart Data
+            // Chart Data
             Map<String, Double> categoryData = chartService.getCategoryTotals(cardId);
             model.addAttribute("categoryLabels", categoryData.keySet());
             model.addAttribute("categoryData", categoryData.values());
@@ -84,12 +83,20 @@ public class ExpenseController {
             Map<String, Double> dailyData = chartService.getDailySpend(cardId);
             model.addAttribute("dailyLabels", dailyData.keySet());
             model.addAttribute("dailyTotals", dailyData.values());
+        } else {
+            // Fallback data to avoid null issues in Thymeleaf
+            model.addAttribute("categoryLabels", List.of());
+            model.addAttribute("categoryData", List.of());
+            model.addAttribute("vendorLabels", List.of());
+            model.addAttribute("vendorTotals", List.of());
+            model.addAttribute("dailyLabels", List.of());
+            model.addAttribute("dailyTotals", List.of());
         }
 
-        return "dashboard"; // maps to templates/dashboard.html
+        return "dashboard";
     }
 
-    // ⬇️ CSV Export Endpoint
+    // ⬇️ CSV Export
     @GetMapping("/expenses/export")
     public void exportToCSV(HttpServletResponse response) throws IOException {
         response.setContentType("text/csv");

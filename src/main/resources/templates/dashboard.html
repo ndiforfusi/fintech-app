@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <title>Dashboard | FinTech</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Fonts & Styles -->
   <link rel="stylesheet" href="/assets/css/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -30,7 +28,7 @@
     }
 
     .logo {
-      height: 90px; /* 🔼 Updated logo size */
+      height: 100px; /* ⬆️ Updated size */
     }
 
     .nav-links a {
@@ -161,7 +159,7 @@
 <div class="container">
   <h2 class="dashboard-title">Monthly Expenses</h2>
 
-  <!-- Form Header Labels -->
+  <!-- Form Header -->
   <div class="form-labels">
     <div>Vendor</div>
     <div>Amount ($)</div>
@@ -171,7 +169,7 @@
     <div></div>
   </div>
 
-  <!-- Form Inputs -->
+  <!-- Form -->
   <form method="post" th:object="${expense}" class="dashboard-form-table">
     <input type="text" th:field="*{vendor}" placeholder="Vendor" required>
     <input type="number" th:field="*{amount}" step="0.01" placeholder="Amount" required>
@@ -184,7 +182,7 @@
     <button type="submit">Add Expense</button>
   </form>
 
-  <!-- Charts Section -->
+  <!-- Charts -->
   <div class="dashboard-charts">
     <canvas id="categoryChart"></canvas>
     <canvas id="vendorChart"></canvas>
@@ -192,7 +190,7 @@
   </div>
 </div>
 
-<!-- Chart.js Rendering -->
+<!-- Chart.js Render -->
 <script>
   const categoryLabels = [[${categoryLabels}]];
   const categoryData = [[${categoryData}]];
