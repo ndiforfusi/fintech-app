@@ -28,8 +28,8 @@ public class ChartServiceImpl implements ChartService {
         return getCurrentMonthExpenses(cardId).stream()
                 .collect(Collectors.groupingBy(
                         Expense::getCategory,
-                        Collectors.summingDouble(Expense::getAmount)
-                ));
+                        TreeMap::new, // Sorted by category
+                        Collectors.summingDouble(Expense::getAmount)));
     }
 
     @Override
@@ -37,17 +37,16 @@ public class ChartServiceImpl implements ChartService {
         return getCurrentMonthExpenses(cardId).stream()
                 .collect(Collectors.groupingBy(
                         Expense::getVendor,
-                        Collectors.summingDouble(Expense::getAmount)
-                ));
+                        TreeMap::new, // Sorted by vendor
+                        Collectors.summingDouble(Expense::getAmount)));
     }
 
     @Override
     public Map<String, Double> getDailySpend(Long cardId) {
         return getCurrentMonthExpenses(cardId).stream()
                 .collect(Collectors.groupingBy(
-                        e -> e.getDate().toString(),
-                        TreeMap::new, // keep days sorted
-                        Collectors.summingDouble(Expense::getAmount)
-                ));
+                        e -> e.getDate().toString(), // "YYYY-MM-DD"
+                        TreeMap::new, // keep dates sorted
+                        Collectors.summingDouble(Expense::getAmount)));
     }
 }

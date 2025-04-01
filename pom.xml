@@ -1,8 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="
-           http://maven.apache.org/POM/4.0.0
-           http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
@@ -18,7 +17,7 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>3.1.4</version>
-    <relativePath/> <!-- lookup parent from repository -->
+    <relativePath/>
   </parent>
 
   <properties>
@@ -26,7 +25,7 @@
   </properties>
 
   <dependencies>
-    <!-- 🌐 Web & MVC -->
+    <!-- 🌐 Spring Web (REST, MVC) -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
@@ -38,7 +37,7 @@
       <artifactId>spring-boot-starter-thymeleaf</artifactId>
     </dependency>
 
-    <!-- 🗃️ Data Access -->
+    <!-- 🗃️ Spring Data JPA -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -51,13 +50,13 @@
       <version>8.0.33</version>
     </dependency>
 
-    <!-- ✅ Validation -->
+    <!-- ✅ Validation (JSR-380) -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-validation</artifactId>
     </dependency>
 
-    <!-- 🔁 DevTools (Auto-Reload) -->
+    <!-- 🔁 DevTools (auto-reload during development) -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
@@ -65,7 +64,22 @@
       <optional>true</optional>
     </dependency>
 
-    <!-- 📘 Swagger (Optional - Uncomment to use) -->
+    <!-- ✅ Fix for @PostConstruct (Java 17+) -->
+    <dependency>
+      <groupId>jakarta.annotation</groupId>
+      <artifactId>jakarta.annotation-api</artifactId>
+      <version>2.1.1</version>
+    </dependency>
+
+    <!-- 🔍 Optional: Spring Boot Actuator for health checks -->
+    <!--
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    -->
+
+    <!-- 📘 Optional: Swagger/OpenAPI UI -->
     <!--
     <dependency>
       <groupId>org.springdoc</groupId>
@@ -77,11 +91,21 @@
 
   <build>
     <plugins>
-      <!-- 🚀 Spring Boot Maven Plugin -->
+      <!-- 🛠 Java 17 Compilation -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.11.0</version>
+        <configuration>
+          <source>17</source>
+          <target>17</target>
+        </configuration>
+      </plugin>
+
+      <!-- 🚀 Spring Boot plugin -->
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <version>3.1.4</version>
       </plugin>
     </plugins>
   </build>

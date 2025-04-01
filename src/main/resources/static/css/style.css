@@ -1,118 +1,144 @@
-body {
-    font-family: 'Poppins', 'Roboto', sans-serif;
-    background-color: #F4F6F8;
-    margin: 0;
-    padding: 0;
-    color: #333;
-    background-image: url('/assets/images/dashboard-bg.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-}
-
-.app-header {
-    background-color: #1E2A38;
-    color: white;
-    padding: 1rem 2rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
+/* ========== HEADER LOGO ========== */
 .logo {
-    height: 50px;
+    height: auto;
+    max-height: 160px;
+    /* Larger, clearer logo */
+    max-width: 100%;
+    display: block;
+    margin: 0 auto;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
 }
 
-.container {
-    max-width: 960px;
-    margin: 2rem auto;
-    padding: 1rem;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+/* ========== NAVIGATION STYLING ========== */
+.nav-links a {
+    color: #C7A35C;
+    font-weight: bold;
+    margin-left: 1.5rem;
+    font-size: 1.1rem;
+    text-decoration: none;
 }
 
-.styled-table {
+.nav-links a:hover {
+    color: #A9742C;
+}
+
+/* ========== FORM HEADERS (aligned with inputs) ========== */
+.form-labels {
     width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 2rem;
-    font-size: 0.95rem;
-}
-
-.styled-table th,
-.styled-table td {
-    border: 1px solid #ddd;
-    padding: 0.75rem;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1rem;
+    font-weight: 600;
+    color: #fff;
+    background-color: #C7A35C;
+    padding: 0.75rem 1rem;
+    border-radius: 6px 6px 0 0;
     text-align: left;
 }
 
-.styled-table th {
-    background-color: #C7A35C;
-    color: #fff;
-    font-weight: 600;
-}
-
-.add-expense-form input,
-.add-expense-form select {
-    padding: 0.5rem;
-    margin: 0.5rem 0;
+/* ========== FORM FIELDS ========== */
+.dashboard-form-table {
     width: 100%;
-    display: block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1rem;
+    margin: 1rem 0 2rem;
 }
 
-.add-expense-form button {
+.dashboard-form-table input,
+.dashboard-form-table select {
+    width: 100%;
+    padding: 0.6rem;
+    font-size: 0.95rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+/* ========== SUBMIT BUTTON ========== */
+.dashboard-form-table button {
+    grid-column: span 6;
     padding: 0.75rem 1.5rem;
     background-color: #C7A35C;
     color: white;
-    border: none;
-    cursor: pointer;
     font-weight: bold;
-    border-radius: 4px;
-    transition: background 0.3s ease;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.add-expense-form button:hover {
+.dashboard-form-table button:hover {
     background-color: #A9742C;
 }
 
-.card-selector {
-    font-size: 1rem;
-    margin-bottom: 1rem;
-    border-color: #C7A35C;
-}
-
-.summary-box {
-    padding: 1rem;
-    border-radius: 6px;
-    margin-bottom: 1.5rem;
-    border: 1px solid #C7A35C;
-    background-color: #fffbe6;
-    color: #5a4a1c;
-}
-
-.summary-box.warning {
-    background-color: #fff3cd;
-    border-color: #ffc107;
-}
-
-.summary-box.danger {
-    background-color: #f8d7da;
-    border-color: #dc3545;
+/* ========== CHART CONTAINER FIXES ========== */
+.dashboard-charts-wrapper {
+    margin-top: 3rem;
 }
 
 .dashboard-charts {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 2rem;
-    margin-top: 2rem;
 }
 
-canvas {
+.chart-container {
+    position: relative;
     background: white;
-    padding: 1rem;
     border-radius: 8px;
+    padding: 1rem;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    min-height: 350px;
+}
+
+/* Optional: button + dropdown alignment inside chart cards */
+.chart-container select,
+.chart-container button {
+    margin-left: 0.5rem;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
+
+.chart-container button {
+    background-color: #C7A35C;
+    color: #fff;
+}
+
+.chart-container button:hover {
+    background-color: #A9742C;
+}
+
+/* ========== RESPONSIVE RULES ========== */
+@media (max-width: 768px) {
+
+    .form-labels,
+    .dashboard-form-table {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-form-table button {
+        grid-column: span 1;
+    }
+
+    .logo {
+        max-height: 120px;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .chart-container {
+        padding: 1rem 0.5rem;
+    }
+
+    .chart-container select,
+    .chart-container button {
+        margin: 0.3rem 0.2rem;
+    }
 }
