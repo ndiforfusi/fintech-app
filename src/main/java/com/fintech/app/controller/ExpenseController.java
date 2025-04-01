@@ -9,6 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +50,6 @@ public class ExpenseController {
     // ➕ Save New Expense
     @PostMapping("/expenses")
     public String addExpense(@ModelAttribute Expense expense) {
-        // Make sure the selected card is resolved from ID before saving
         if (expense.getCard() != null && expense.getCard().getId() != null) {
             cardRepo.findById(expense.getCard().getId()).ifPresent(expense::setCard);
         }
@@ -85,5 +87,28 @@ public class ExpenseController {
         }
 
         return "dashboard"; // maps to templates/dashboard.html
+    }
+
+    // ⬇️ CSV Export Endpoint
+    @GetMapping("/expenses/export")
+    public void exportToCSV(HttpServletResponse response) throws IOException {
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; filename=expenses.csv");
+
+        List<Expense> expenses = expenseService.findMonthlyExpenses();
+        PrintWriter writer = response.getWriter();
+        writer.println("Vendor,Amount,Date,Category,Credit Card");
+
+        for (Expense e : expenses) {
+            writer.printf("%s,%.2f,%s,%s,%s%n",
+                    e.getVendor(),
+                    e.getAmount(),
+                    e.getDate(),
+                    e.getCategory(),
+                    e.getCard() != null ? e.getCard().getMaskedNumber() : "N/A");
+        }
+
+        writer.flush();
+        writer.close();
     }
 }
