@@ -62,6 +62,7 @@ public class ExpenseController {
     public String dashboard(@RequestParam(required = false) Long cardId, Model model) {
         List<CreditCard> cards = cardRepo.findAll();
         model.addAttribute("cards", cards);
+        model.addAttribute("expense", new Expense()); // ✅ Required for form binding in dashboard.html
 
         if (cardId != null) {
             model.addAttribute("selectedCardId", cardId);
@@ -71,7 +72,7 @@ public class ExpenseController {
             CreditCard selectedCard = cardRepo.findById(cardId).orElse(null);
             model.addAttribute("limit", selectedCard != null ? selectedCard.getCreditLimit() : 0.0);
 
-            // Chart Data
+            // 📊 Chart Data
             Map<String, Double> categoryData = chartService.getCategoryTotals(cardId);
             model.addAttribute("categoryLabels", categoryData.keySet());
             model.addAttribute("categoryData", categoryData.values());
@@ -84,7 +85,10 @@ public class ExpenseController {
             model.addAttribute("dailyLabels", dailyData.keySet());
             model.addAttribute("dailyTotals", dailyData.values());
         } else {
-            // Fallback data to avoid null issues in Thymeleaf
+            // Ensure empty lists to prevent Thymeleaf error on first load
+            model.addAttribute("expenses", List.of());
+            model.addAttribute("totalSpent", 0.0);
+            model.addAttribute("limit", 0.0);
             model.addAttribute("categoryLabels", List.of());
             model.addAttribute("categoryData", List.of());
             model.addAttribute("vendorLabels", List.of());
