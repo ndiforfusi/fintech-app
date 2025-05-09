@@ -10,7 +10,8 @@ on:
         type: choice
         options:
           - dev
-          - staging
+          - qa
+          - uat
           - prod
   push:
     branches:
