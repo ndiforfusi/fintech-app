@@ -55,6 +55,7 @@ jobs:
           -Dsonar.projectKey=fintech-app
           -Dsonar.projectName='fintech-app'
           -Dsonar.sources=.
+          -Dsonar.java.binaries=target/classes
 
       - name: Set Image Tag
         id: set-tag
