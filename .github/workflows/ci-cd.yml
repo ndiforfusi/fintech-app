@@ -26,9 +26,10 @@ env:
   ECR_REPO: fintech-app
 
 jobs:
-  build:
-    name: Build & Push Docker Image
-    runs-on: ubuntu-latest
+  build-and-push:
+    name: 'Build and Push Docker Image'
+    timeout-minutes: 60
+    runs-on: self-hosted
     outputs:
       image-tag: ${{ steps.set-tag.outputs.image-tag }}
 
@@ -101,7 +102,7 @@ jobs:
   deploy:
     name: Deploy to ${{ github.event.inputs.environment || 'prod' }} EKS
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout Repo
