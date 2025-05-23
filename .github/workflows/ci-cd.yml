@@ -131,7 +131,8 @@ jobs:
             ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Configure kubectl
-        uses: aws-actions/eks-setup-kubectl@v1-node16
+        uses: aws-actions/eks-setup-kubectl@ae631cda24e8f87b9b1b8f9f90210ebdcb885b79
+
         with:
           cluster-name: ${{ github.event.inputs.environment || 'prod' }}-eks-cluster
           region: ${{ env.AWS_REGION }}
