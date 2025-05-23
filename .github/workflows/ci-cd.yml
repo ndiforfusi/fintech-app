@@ -15,8 +15,7 @@ on:
           - prod
       image_tag:
         description: 'Docker Image Tag (e.g., 1.0.0)'
-        required: true
-        default: '1.0.0'
+        required: false
 
   push:
     branches:
@@ -53,7 +52,6 @@ jobs:
           source /etc/profile.d/maven.sh
           mvn clean package -DskipTests
 
-
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v2
         env:
@@ -68,7 +66,15 @@ jobs:
 
       - name: Set Image Tag
         id: set-tag
-        run: echo "image-tag=${{ github.event.inputs.image_tag }}" >> "$GITHUB_OUTPUT"
+        run: |
+          if [ -n "${{ github.event.inputs.image_tag }}" ]; then
+            TAG="${{ github.event.inputs.image_tag }}"
+            echo "Using provided image tag: $TAG"
+          else
+            TAG=$(date +%Y%m%d%H%M%S)
+            echo "Generated unique image tag: $TAG"
+          fi
+          echo "image-tag=$TAG" >> "$GITHUB_OUTPUT"
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -96,20 +102,20 @@ jobs:
         if: success()
         run: |
           curl -X POST -H 'Content-type: application/json' \
-            --data '{"text":"✅ *Build Succeeded* for `${{ github.workflow }}` by `${{ github.actor }}` in `${{ github.event.inputs.environment }}`."}' \
+            --data '{"text":"✅ *Build Succeeded* for `${{ github.workflow }}` by `${{ github.actor }}` in `${{ github.event.inputs.environment || 'prod' }}`."}' \
             ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Notify Slack (❌ Build Failed)
         if: failure()
         run: |
           curl -X POST -H 'Content-type: application/json' \
-            --data '{"text":"❌ *Build Failed* in `${{ github.workflow }}` triggered by `${{ github.actor }}` for `${{ github.event.inputs.environment }}`."}' \
+            --data '{"text":"❌ *Build Failed* in `${{ github.workflow }}` triggered by `${{ github.actor }}` for `${{ github.event.inputs.environment || 'prod' }}`."}' \
             ${{ secrets.SLACK_WEBHOOK_URL }}
 
   deploy:
-    name: Deploy to ${{ github.event.inputs.environment }} EKS
+    name: Deploy to ${{ github.event.inputs.environment || 'prod' }} EKS
     runs-on: self-hosted
-    needs: build-and-push   
+    needs: build-and-push
 
     steps:
       - name: Checkout Repo
@@ -118,18 +124,18 @@ jobs:
       - name: Notify Slack (🚀 Starting Deployment)
         run: |
           curl -X POST -H 'Content-type: application/json' \
-            --data '{"text":"🚀 *Deploying* `${{ github.workflow }}` to `${{ github.event.inputs.environment }}`..." }' \
+            --data '{"text":"🚀 *Deploying* `${{ github.workflow }}` to `${{ github.event.inputs.environment || 'prod' }}`..." }' \
             ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Configure kubectl
         uses: aws-actions/eks-setup-kubectl@v1
         with:
-          cluster-name: ${{ github.event.inputs.environment }}-eks-cluster
+          cluster-name: ${{ github.event.inputs.environment || 'prod' }}-eks-cluster
           region: ${{ env.AWS_REGION }}
 
       - name: Update kubeconfig
         run: |
-          CLUSTER=${{ github.event.inputs.environment }}-eks-cluster
+          CLUSTER=${{ github.event.inputs.environment || 'prod' }}-eks-cluster
           aws eks update-kubeconfig --region $AWS_REGION --name "$CLUSTER"
 
       - name: Install EKS Add-ons
@@ -145,7 +151,7 @@ jobs:
 
       - name: Deploy Application via Kustomize
         run: |
-          ENV=${{ github.event.inputs.environment }}
+          ENV=${{ github.event.inputs.environment || 'prod' }}
           IMAGE_TAG=${{ needs.build-and-push.outputs.image-tag }}
 
           echo "🔧 Deploying to: $ENV"
@@ -158,13 +164,13 @@ jobs:
         if: success()
         run: |
           curl -X POST -H 'Content-type: application/json' \
-            --data '{"text":"✅ *Deployment Successful* to `${{ github.event.inputs.environment }}` by `${{ github.actor }}` in `${{ github.workflow }}`."}' \
+            --data '{"text":"✅ *Deployment Successful* to `${{ github.event.inputs.environment || 'prod' }}` by `${{ github.actor }}` in `${{ github.workflow }}`."}' \
             ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Notify Slack (🔥 Deploy Failed)
         if: failure()
         run: |
           curl -X POST -H 'Content-type: application/json' \
-            --data '{"text":"🔥 *Deployment FAILED* to `${{ github.event.inputs.environment }}` in `${{ github.workflow }}`."}' \
+            --data '{"text":"🔥 *Deployment FAILED* to `${{ github.event.inputs.environment || 'prod' }}` in `${{ github.workflow }}`."}' \
             ${{ secrets.SLACK_WEBHOOK_URL }}
 
