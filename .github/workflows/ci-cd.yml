@@ -49,7 +49,7 @@ jobs:
 
       - name: Build with Maven
         run: |
-          source /etc/profile.d/maven.sh
+          source /etc/profile.d/maven.sh || true
           mvn clean package -DskipTests
 
       - name: SonarQube Scan
@@ -58,11 +58,11 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
-         args: >
-          -Dsonar.projectKey=fintech-app
-          -Dsonar.projectName='fintech-app'
-          -Dsonar.sources=.
-          -Dsonar.java.binaries=target/classes
+          args: >
+            -Dsonar.projectKey=fintech-app
+            -Dsonar.projectName='fintech-app'
+            -Dsonar.sources=.
+            -Dsonar.java.binaries=target/classes
 
       - name: Set Image Tag
         id: set-tag
@@ -84,18 +84,22 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to AWS ECR
-        env:
-          AWS_REGION: ${{ env.AWS_REGION }}
-          AWS_ACCOUNT_ID: ${{ env.AWS_ACCOUNT_ID }}
         run: |
           aws ecr get-login-password --region $AWS_REGION | \
-            docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+          docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+
       - name: Build and Push Docker Image
+        env:
+          IMAGE_TAG: ${{ steps.set-tag.outputs.image-tag }}
+          AWS_REGION: ${{ env.AWS_REGION }}
+          AWS_ACCOUNT_ID: ${{ env.AWS_ACCOUNT_ID }}
+          ECR_REPO: ${{ env.ECR_REPO }}
         run: |
-          IMAGE_TAG=${{ steps.set-tag.outputs.image-tag }}
           IMAGE_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG
-          sudo docker build -t $IMAGE_URI .
-          sudo docker push $IMAGE_URI
+          echo "🔨 Building Docker image: $IMAGE_URI"
+          docker build -t $IMAGE_URI .
+          echo "📤 Pushing Docker image to ECR..."
+          docker push $IMAGE_URI
 
       - name: Notify Slack (✅ Build Success)
         if: success()
@@ -172,4 +176,3 @@ jobs:
           curl -X POST -H 'Content-type: application/json' \
             --data '{"text":"🔥 *Deployment FAILED* to `${{ github.event.inputs.environment || 'prod' }}` in `${{ github.workflow }}`."}' \
             ${{ secrets.SLACK_WEBHOOK_URL }}
-
