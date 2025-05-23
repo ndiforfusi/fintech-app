@@ -101,7 +101,6 @@ jobs:
 
   deploy:
     name: Deploy to ${{ github.event.inputs.environment || 'prod' }} EKS
-    needs: build
     runs-on: self-hosted
 
     steps:
