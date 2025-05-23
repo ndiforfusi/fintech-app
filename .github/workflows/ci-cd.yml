@@ -49,7 +49,10 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with Maven
-        run: mvn clean package -DskipTests
+        run: |
+          source /etc/profile.d/maven.sh
+          mvn clean package -DskipTests
+
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v2
