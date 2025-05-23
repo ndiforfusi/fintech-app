@@ -131,14 +131,14 @@ jobs:
             ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Configure kubectl
-        uses: aws-actions/eks-setup-kubectl@v1
+        uses: aws-actions/eks-setup-kubectl@v1-node16
         with:
           cluster-name: ${{ github.event.inputs.environment || 'prod' }}-eks-cluster
           region: ${{ env.AWS_REGION }}
 
       - name: Update kubeconfig
         run: |
-          CLUSTER=${{ github.event.inputs.environment || 'prod' }}-eks-cluster
+          CLUSTER=${{ github.event.inputs.environment || 'prod' }}-dominion-cluster
           aws eks update-kubeconfig --region $AWS_REGION --name "$CLUSTER"
 
       - name: Install EKS Add-ons
