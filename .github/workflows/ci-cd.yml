@@ -10,7 +10,8 @@ on:
         type: choice
         options:
           - dev
-          - staging
+          - qa
+          - uat
           - prod
   push:
     branches:
@@ -25,9 +26,10 @@ env:
   ECR_REPO: fintech-app
 
 jobs:
-  build:
-    name: Build & Push Docker Image
-    runs-on: ubuntu-latest
+  build-and-push:
+    name: 'Build and Push Docker Image'
+    timeout-minutes: 60
+    runs-on: self-hosted
     outputs:
       image-tag: ${{ steps.set-tag.outputs.image-tag }}
 
@@ -45,10 +47,16 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@master
+        uses: SonarSource/sonarqube-scan-action@v2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+         args: >
+          -Dsonar.projectKey=fintech-app
+          -Dsonar.projectName='fintech-app'
+          -Dsonar.sources=.
+          -Dsonar.java.binaries=target/classes
 
       - name: Set Image Tag
         id: set-tag
@@ -59,15 +67,17 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
-          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ github.event.inputs.environment || 'prod' }}-GitHubActionsECR
-          role-session-name: GitHubActionsSession
 
       - name: Login to AWS ECR
+        env:
+          AWS_REGION: ${{ env.AWS_REGION }}
+          AWS_ACCOUNT_ID: ${{ env.AWS_ACCOUNT_ID }}
         run: |
           aws ecr get-login-password --region $AWS_REGION | \
             docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
-
       - name: Build and Push Docker Image
         run: |
           IMAGE_TAG=${{ steps.set-tag.outputs.image-tag }}
@@ -92,7 +102,7 @@ jobs:
   deploy:
     name: Deploy to ${{ github.event.inputs.environment || 'prod' }} EKS
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout Repo
