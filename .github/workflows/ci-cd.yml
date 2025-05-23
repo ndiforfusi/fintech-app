@@ -90,7 +90,6 @@ jobs:
         run: |
           aws ecr get-login-password --region $AWS_REGION | \
             docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
-
       - name: Build and Push Docker Image
         run: |
           IMAGE_TAG=${{ steps.set-tag.outputs.image-tag }}
