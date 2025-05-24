@@ -144,8 +144,8 @@ jobs:
 
       - name: Deploy Monitoring and Logging
         run: |
-          kubectl apply -f ./eks_addons/monitoring
-          kubectl apply -f ./eks_addons/elk
+          kubectl apply -k ./eks_addons/monitoring
+          kubectl apply -k ./eks_addons/elk
 
       - name: Deploy Application via Kustomize
         run: |
