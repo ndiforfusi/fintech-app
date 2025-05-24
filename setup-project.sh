@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#
 # === CONFIGURATION ===
 AWS_ACCOUNT_ID="999568710647"
 AWS_REGION="us-east-2"
