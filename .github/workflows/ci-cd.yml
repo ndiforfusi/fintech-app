@@ -138,9 +138,9 @@ jobs:
 
       - name: Install EKS Add-ons
         run: |
-          chmod +x eks-addons/script/helm_install.sh eks-addons/script/helm_charts.sh
-          ./eks-addons/script/helm_install.sh
-          ./eks-addons/script/helm_charts.sh
+          chmod +x eks_addons/script/helm_install.sh eks_addons/script/helm_charts.sh
+          ./eks_addons/script/helm_install.sh
+          ./eks_addons/script/helm_charts.sh
 
       - name: Deploy Monitoring and Logging
         run: |
