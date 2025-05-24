@@ -130,17 +130,10 @@ jobs:
             --data '{"text":"🚀 *Deploying* `${{ github.workflow }}` to `${{ github.event.inputs.environment || 'prod' }}`..." }' \
             ${{ secrets.SLACK_WEBHOOK_URL }}
 
-      - name: Configure kubectl
-        uses: aws-actions/eks-setup-kubectl@ae631cda24e8f87b9b1b8f9f90210ebdcb885b79
-
-        with:
-          cluster-name: ${{ github.event.inputs.environment || 'prod' }}-eks-cluster
-          region: ${{ env.AWS_REGION }}
-
-      - name: Update kubeconfig
+      - name: Configure kubectl manually via AWS CLI
         run: |
-          CLUSTER=${{ github.event.inputs.environment || 'prod' }}-dominion-cluster
-          aws eks update-kubeconfig --region $AWS_REGION --name "$CLUSTER"
+          CLUSTER_NAME=${{ github.event.inputs.environment || 'prod' }}-dominion-cluster
+          aws eks update-kubeconfig --region $AWS_REGION --name "$CLUSTER_NAME"
 
       - name: Install EKS Add-ons
         run: |
