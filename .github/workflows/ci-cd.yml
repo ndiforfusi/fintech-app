@@ -153,7 +153,7 @@ jobs:
           IMAGE_TAG=${{ needs.build-and-push.outputs.image-tag }}
           echo "🔧 Deploying to: $ENV"
           echo "📦 Using Docker image tag: $IMAGE_TAG"
-          sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" overlays/$ENV/patch-deployment.yaml
+          sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" ./k8s/overlays/$ENV/patch-deployment.yaml
           kubectl apply -k ./k8s/overlays/$ENV
 
       - name: Notify Slack (✅ Deploy Success)
