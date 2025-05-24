@@ -1,6 +1,6 @@
 permissions:
-  id-token: write  # For OIDC (recommended for AWS auth)
-  contents: read   # Required for actions/checkout
+  id-token: write
+  contents: read
 
 name: CI-CD Pipeline
 
@@ -61,6 +61,9 @@ jobs:
             -Dsonar.projectName='fintech-app'
             -Dsonar.sources=.
             -Dsonar.java.binaries=target/classes
+
+      - name: Fix Permissions After SonarQube
+        run: sudo chown -R $USER:$USER .scannerwork || true
 
       - name: Set Image Tag
         id: set-tag
@@ -151,10 +154,22 @@ jobs:
         run: |
           ENV=${{ github.event.inputs.environment || 'prod' }}
           IMAGE_TAG=${{ needs.build-and-push.outputs.image-tag }}
+          IMAGE_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG
+          OVERLAY_DIR=./k8s/overlays/$ENV
+
           echo "🔧 Deploying to: $ENV"
-          echo "📦 Using Docker image tag: $IMAGE_TAG"
-          sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" ./k8s/overlays/$ENV/patch-deployment.yaml
-          kubectl apply -k ./k8s/overlays/$ENV
+          echo "📦 Using Docker image: $IMAGE_URI"
+
+          if [ ! -d "$OVERLAY_DIR" ]; then
+            echo "❌ Overlay directory $OVERLAY_DIR not found!"
+            exit 1
+          fi
+
+          cd "$OVERLAY_DIR"
+          kustomize edit set image $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO=$IMAGE_URI
+          cd -
+
+          kubectl apply -k "$OVERLAY_DIR"
 
       - name: Notify Slack (✅ Deploy Success)
         if: success()
