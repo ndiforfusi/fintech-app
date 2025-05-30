@@ -5,7 +5,7 @@ metadata:
   namespace: fintech
 spec:
   selector:
-    app: db
+    app: mysql
   ports:
   - protocol: TCP
     port: 3306
