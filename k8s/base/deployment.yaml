@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app
+  name: mysql-service
   namespace: fintech
 spec:
   replicas: 3
