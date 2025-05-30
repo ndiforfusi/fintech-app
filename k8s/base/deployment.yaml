@@ -11,7 +11,7 @@ spec:
   template:
     metadata:
       labels:
-        app: app
+        app: fintech-app # ✅ Matches selector
     spec:
       containers:
       - name: fintech-app
@@ -54,5 +54,5 @@ spec:
             podAffinityTerm:
               labelSelector:
                 matchLabels:
-                  app: app
+                  app: fintech-app # ✅ Must match pod labels
               topologyKey: "kubernetes.io/hostname"
