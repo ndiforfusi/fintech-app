@@ -171,7 +171,6 @@ sudo systemctl stop github-runner.service
 sudo systemctl disable github-runner.service
 sudo rm /etc/systemd/system/github-runner.service
 sudo systemctl daemon-reload
-Feel free to copy and paste this into your project’s README.md. Let me know if you want it pre-filled with your actual file paths and variables.
 
 
 
