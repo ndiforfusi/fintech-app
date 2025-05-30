@@ -7,7 +7,7 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: app
+      app: fintech-app
   template:
     metadata:
       labels:
