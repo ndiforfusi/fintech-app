@@ -20,7 +20,7 @@ spec:
         - containerPort: 8080
         env:
         - name: SPRING_DATASOURCE_URL
-          value: jdbc:mysql://db.fintech.svc.cluster.local:3306/fintech
+          value: jdbc:mysql://prod-mysql-service.fintech.svc.cluster.local:3306/fintech
         - name: SPRING_DATASOURCE_USERNAME
           value: root
         - name: SPRING_DATASOURCE_PASSWORD
