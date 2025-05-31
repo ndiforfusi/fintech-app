@@ -119,7 +119,7 @@ Script located at: /home/ubuntu/run.sh
 ⚙️ 1. Create the systemd Service
 Create a new systemd unit file:
 
-sudo nano /etc/systemd/system/github-runner.service
+sudo vi /etc/systemd/system/github-runner.service
 Paste the following content:
 
 [Unit]
@@ -136,11 +136,15 @@ Environment=RUNNER_MANUALLY_TRAP_SIG=1
 
 [Install]
 WantedBy=multi-user.target
+
+
+
 ✅ Make sure the paths (ExecStart, WorkingDirectory) are accurate for your environment.
 
 🔐 2. Make the Script Executable
 
 chmod +x /home/ubuntu/run.sh
+
 🔄 3. Enable and Start the Service
 Run the following commands to enable the service to start on boot and start it now:
 
@@ -148,6 +152,8 @@ sudo systemctl daemon-reexec
 sudo systemctl daemon-reload
 sudo systemctl enable github-runner.service
 sudo systemctl start github-runner.service
+
+
 ✅ 4. Verify the Service
 Check if the runner is active:
 

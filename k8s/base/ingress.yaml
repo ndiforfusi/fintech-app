@@ -8,8 +8,8 @@ metadata:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-2:999568710647:certificate/0d4e9348-fd3b-4f06-82b8-0b7405c75987
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
-    alb.ingress.kubernetes.io/healthcheck-port: "80"
-    alb.ingress.kubernetes.io/healthcheck-path: "/"
+    alb.ingress.kubernetes.io/healthcheck-port: "8080"
+    alb.ingress.kubernetes.io/healthcheck-path: "/actuator/health"
     alb.ingress.kubernetes.io/success-codes: "200,302"
 spec:
   ingressClassName: alb
