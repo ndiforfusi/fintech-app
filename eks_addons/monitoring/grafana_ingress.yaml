@@ -1,8 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: kube-prometheus-stack-grafana
-  namespace: monitoring 
+  name: grafana-ingress
+  namespace: monitoring
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-2:999568710647:certificate/0d4e9348-fd3b-4f06-82b8-0b7405c75987
@@ -17,13 +17,13 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-  - host: grafana.yourdomain.com # 👈 Optional: specify domain if using a host rule
+  - host: grafana.dominionsystem.com # 🔁 Replace with your actual domain
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: kube-prometheus-stack-grafana
+            name: grafana
             port:
               number: 80
