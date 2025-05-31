@@ -8,5 +8,17 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
   thymeleaf:
     cache: false
+
 server:
   port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+  server:
+    port: 8080
