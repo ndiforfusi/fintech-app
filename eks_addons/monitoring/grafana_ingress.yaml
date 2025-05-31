@@ -2,20 +2,23 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: kube-prometheus-stack-grafana
+  namespace: monitoring 
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-2:999568710647:certificate/0d4e9348-fd3b-4f06-82b8-0b7405c75987
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/healthcheck-port: "80" # Updated to match the service port
+    alb.ingress.kubernetes.io/healthcheck-port: "80"
     alb.ingress.kubernetes.io/healthcheck-path: /
     alb.ingress.kubernetes.io/success-codes: "200,302"
     alb.ingress.kubernetes.io/load-balancer-name: grafana-alb
     alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=30
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
 spec:
   ingressClassName: alb
   rules:
-  - http:
+  - host: grafana.yourdomain.com # 👈 Optional: specify domain if using a host rule
+    http:
       paths:
       - path: /
         pathType: Prefix
