@@ -97,6 +97,14 @@ jobs:
           docker build -t $IMAGE_URI .
           echo "📤 Pushing Docker image..."
           docker push $IMAGE_URI
+      - name: Clean Up Local Docker Images
+        if: always()
+        run: |
+          IMAGE_TAG=${{ steps.set-tag.outputs.image-tag }}
+          IMAGE_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG
+          echo "🧹 Cleaning up local Docker image: $IMAGE_URI"
+          docker rmi $IMAGE_URI || true
+          docker image prune -f || true
 
       - name: Notify Slack (✅ Build Success)
         if: success()
