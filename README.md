@@ -106,6 +106,90 @@ Let me know if you'd like a **`LICENSE`** file or **Swagger/OpenAPI docs** secti
 
 
 
+🏃 GitHub Runner Auto-Start Setup (Ubuntu)
+This guide explains how to configure the run.sh script to run continuously and automatically after reboot using systemd.
+
+📁 Prerequisites
+Ubuntu system with systemd (default in most distributions).
+
+GitHub Actions self-hosted runner already configured.
+
+Script located at: /home/ubuntu/run.sh
+
+⚙️ 1. Create the systemd Service
+Create a new systemd unit file:
+
+sudo vi /etc/systemd/system/github-runner.service
+Paste the following content:
+
+[Unit]
+Description=GitHub Actions Self-Hosted Runner
+After=network.target
+
+[Service]
+ExecStart=/home/ubuntu/run.sh
+WorkingDirectory=/home/ubuntu
+User=ubuntu
+Restart=always
+RestartSec=10
+Environment=RUNNER_MANUALLY_TRAP_SIG=1
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+✅ Make sure the paths (ExecStart, WorkingDirectory) are accurate for your environment.
+
+🔐 2. Make the Script Executable
+
+chmod +x /home/ubuntu/run.sh
+
+🔄 3. Enable and Start the Service
+Run the following commands to enable the service to start on boot and start it now:
+
+sudo systemctl daemon-reexec
+sudo systemctl daemon-reload
+sudo systemctl enable github-runner.service
+sudo systemctl start github-runner.service
+
+
+✅ 4. Verify the Service
+Check if the runner is active:
+
+sudo systemctl status github-runner.service
+Expected output should show the status as active (running).
+
+💡 Notes
+Restart=always ensures the script restarts if it crashes.
+
+RUNNER_MANUALLY_TRAP_SIG=1 helps the script handle shutdown signals gracefully.
+
+📌 Troubleshooting
+Use journalctl -u github-runner.service -f to see live logs.
+
+Ensure no sudo commands inside the script block automatic execution as ubuntu user.
+
+Confirm networking is available (runner needs internet access).
+
+🧹 To Remove the Service
+sudo systemctl stop github-runner.service
+sudo systemctl disable github-runner.service
+sudo rm /etc/systemd/system/github-runner.service
+sudo systemctl daemon-reload
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
