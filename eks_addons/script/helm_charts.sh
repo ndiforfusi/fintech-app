@@ -36,11 +36,13 @@ kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f 
 if helm list -n monitoring | grep -q "^grafana"; then
     echo "✅ Grafana is already installed in the 'monitoring' namespace. Skipping installation."
 else
-    echo "🚀 Installing Grafana via Helm..."
-    helm install grafana grafana/grafana \
-      --namespace monitoring \
-      --set adminPassword='admin123' \
-      --set service.type=ClusterIP
+    echo "🚀 Installing prometheus-stack via Helm..."
+    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+    helm repo update
+    
+    helm install prometheus-stack prometheus-community/kube-prometheus-stack \
+    --namespace monitoring \
+    --set grafana.enabled=true
 
     echo "⏳ Waiting for Grafana deployment to become ready..."
     kubectl rollout status deployment/grafana -n monitoring
