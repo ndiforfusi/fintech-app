@@ -179,6 +179,23 @@ sudo rm /etc/systemd/system/github-runner.service
 sudo systemctl daemon-reload
 
 
+## 📦 Configuring Prometheus Stack
+✅ Verify grafana password
+
+kubectl --namespace monitoring get pods -l "release=prometheus-stack"
+
+Get Grafana 'admin' user password by running:
+
+kubectl --namespace monitoring get secrets prometheus-stack-grafana -o jsonpath="{.data.admin-password}" | base64 -d ; echo
+
+Access Grafana local instance:
+
+export POD_NAME=$(kubectl --namespace monitoring get pod -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=prometheus-stack" -oname)
+kubectl --namespace monitoring port-forward $POD_NAME 3000 
+
+#
+
+
 
 
 
