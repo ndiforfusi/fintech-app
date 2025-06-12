@@ -49,6 +49,7 @@ jobs:
         run: |
           source /etc/profile.d/maven.sh || true
           mvn clean package -DskipTests
+          whoami
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v2
