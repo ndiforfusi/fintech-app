@@ -49,7 +49,7 @@ jobs:
         run: |
           source /etc/profile.d/maven.sh || true
           mvn clean package -DskipTests
-          whoami
+          
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v2
@@ -62,9 +62,6 @@ jobs:
             -Dsonar.projectName='fintech-app'
             -Dsonar.sources=.
             -Dsonar.java.binaries=target/classes
-
-      - name: Fix Permissions After SonarQube
-        run: sudo chown -R $USER:$USER .scannerwork || true
 
       - name: Set Image Tag
         id: set-tag
