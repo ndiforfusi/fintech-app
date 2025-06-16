@@ -63,9 +63,6 @@ jobs:
             -Dsonar.sources=.
             -Dsonar.java.binaries=target/classes
 
-      # - name: Fix Permissions After SonarQube
-      #   run: sudo chown -R $USER:$USER .scannerwork || true
-
       - name: Set Image Tag
         id: set-tag
         run: |
