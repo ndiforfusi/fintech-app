@@ -114,7 +114,7 @@ Ubuntu system with systemd (default in most distributions).
 
 GitHub Actions self-hosted runner already configured.
 
-Script located at: /home/ubuntu/run.sh
+Script located at: /home/ubuntu/actions-runner/run.sh
 
 ⚙️ 1. Create the systemd Service
 Create a new systemd unit file:
