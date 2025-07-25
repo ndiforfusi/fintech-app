@@ -331,7 +331,8 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-  - http:
+  - host: app.infrasolutionsystems.org
+    http:
       paths:
       - path: /
         pathType: Prefix
