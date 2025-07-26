@@ -331,7 +331,7 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-  - host: kiban.infrasolutionsystems.org
+  - host: kibana.infrasolutionsystems.org
     http:
       paths:
       - path: /
