@@ -320,7 +320,7 @@ metadata:
   namespace: kube-system
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-west-2:999568710647:certificate/e9822346-ba84-4860-b6b0-fdabd5a22827
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-2:831926583884:certificate/56f0f99b-3025-4e0b-a4e3-232821c31c43
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/healthcheck-port: "5601" # Updated to match the service port
@@ -331,7 +331,8 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-  - http:
+  - host: kibana.infrasolutionsystems.org
+    http:
       paths:
       - path: /
         pathType: Prefix

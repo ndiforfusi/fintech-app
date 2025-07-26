@@ -6,21 +6,21 @@ metadata:
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:992382750832:certificate/5f05aad4-b6a5-4ede-8b6c-17b433e38774
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-2:831926583884:certificate/56f0f99b-3025-4e0b-a4e3-232821c31c43
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
-    alb.ingress.kubernetes.io/healthcheck-port: "80"
-    alb.ingress.kubernetes.io/healthcheck-path: "/"
+    alb.ingress.kubernetes.io/healthcheck-port: "8080"
+    alb.ingress.kubernetes.io/healthcheck-path: "/actuator/health"
     alb.ingress.kubernetes.io/success-codes: "200,302"
 spec:
   ingressClassName: alb
   rules:
-  - host: app.dominionsystem.org
+  - host: app.infrasolutionsystems.org
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: app
+            name: app-service
             port:
-              number: 80
+              number: 8080

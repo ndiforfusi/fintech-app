@@ -16,22 +16,22 @@ public class CreditCardController {
         this.cardRepo = cardRepo;
     }
 
-    // 📄 Show credit card creation form (GET /cards/new)
+    // Show credit card creation form (GET /cards/new)
     @GetMapping("/new")
     public String showAddCardForm(Model model) {
         model.addAttribute("card", new CreditCard());
         return "credit-card"; // maps to templates/credit-card.html
     }
 
-    // 📄 Show card list and creation form (GET /cards)
+    // Show card list and creation form (GET /cards)
     @GetMapping
     public String showCardForm(Model model) {
         model.addAttribute("card", new CreditCard());
         model.addAttribute("cards", cardRepo.findAll());
-        return "cards"; // maps to cards.html in templates/
+        return "credit-card"; // updated to match the actual template name
     }
 
-    // ➕ Save new card (POST /cards)
+    // Save new card (POST /cards)
     @PostMapping
     public String addCard(@ModelAttribute CreditCard card) {
         cardRepo.save(card);
