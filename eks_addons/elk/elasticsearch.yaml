@@ -331,8 +331,7 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-  - host: kibana.infrasolutionsystems.org
-    http:
+  - http:
       paths:
       - path: /
         pathType: Prefix
@@ -341,3 +340,4 @@ spec:
             name: kibana-logging
             port:
               number: 5601
+              
