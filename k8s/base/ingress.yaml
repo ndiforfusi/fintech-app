@@ -6,21 +6,21 @@ metadata:
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:992382750832:certificate/5f05aad4-b6a5-4ede-8b6c-17b433e38774
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-2:327019199684:certificate/2440a3ff-3027-456f-8244-c02d07708d99
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
-    alb.ingress.kubernetes.io/healthcheck-port: "80"
-    alb.ingress.kubernetes.io/healthcheck-path: "/"
+    alb.ingress.kubernetes.io/healthcheck-port: "8080"
+    alb.ingress.kubernetes.io/healthcheck-path: "/actuator/health"
     alb.ingress.kubernetes.io/success-codes: "200,302"
 spec:
   ingressClassName: alb
   rules:
-  - host: app.dominionsystem.org
+  - host: app.fusisoft.com
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: app
+            name: app-service
             port:
-              number: 80
+              number: 8080

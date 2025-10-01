@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: db
+  name: mysql
   namespace: fintech
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: db
+      app: mysql
   template:
     metadata:
       labels:
-        app: db
+        app: mysql
     spec:
       containers:
       - name: mysql
-        image: mysql:8
+        image: mysql:8.0.33
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:

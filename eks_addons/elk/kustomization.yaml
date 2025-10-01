@@ -1,4 +1,4 @@
 resources:
-- storage-class.yaml
-- fluentd-config.yaml
-- elastic-stack.yaml
+- storage_class.yaml
+- fluentd.yaml
+- elasticsearch.yaml

@@ -71,13 +71,11 @@
       <version>2.1.1</version>
     </dependency>
 
-    <!-- 🔍 Optional: Spring Boot Actuator for health checks -->
-    <!--
+    <!-- 🔍 Enabled: Spring Boot Actuator for health checks -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
     </dependency>
-    -->
 
     <!-- 📘 Optional: Swagger/OpenAPI UI -->
     <!--
