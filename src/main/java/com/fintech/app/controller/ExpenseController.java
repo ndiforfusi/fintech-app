@@ -5,10 +5,13 @@ import com.fintech.app.entity.Expense;
 import com.fintech.app.repository.CreditCardRepository;
 import com.fintech.app.service.ChartService;
 import com.fintech.app.service.ExpenseService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -49,12 +52,37 @@ public class ExpenseController {
 
     // ➕ Add Expense
     @PostMapping("/expenses")
-    public String addExpense(@ModelAttribute Expense expense) {
+    public String addExpense(
+            @Valid @ModelAttribute("expense") Expense expense,
+            org.springframework.validation.BindingResult bindingResult,
+            Model model,
+            RedirectAttributes redirectAttributes,
+            HttpServletRequest request
+    ) {
         if (expense.getCard() != null && expense.getCard().getId() != null) {
-            cardRepo.findById(expense.getCard().getId()).ifPresent(expense::setCard);
+            cardRepo.findById(expense.getCard().getId()).ifPresentOrElse(
+                    expense::setCard,
+                    () -> bindingResult.rejectValue("card", "card.notFound", "Selected credit card was not found.")
+            );
+        } else {
+            bindingResult.rejectValue("card", "card.required", "Please select a credit card.");
         }
+
+        if (bindingResult.hasErrors()) {
+            if (isDashboardRequest(request)) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Please correct the highlighted fields and try again.");
+                return "redirect:/expenses/dashboard";
+            }
+
+            model.addAttribute("expenses", expenseService.findMonthlyExpenses());
+            model.addAttribute("cards", cardRepo.findAll());
+            model.addAttribute("errorMessage", "Please correct the highlighted fields and try again.");
+            return "expenses";
+        }
+
         expenseService.save(expense);
-        return "redirect:/expenses";
+        redirectAttributes.addFlashAttribute("successMessage", "Expense added successfully.");
+        return "redirect:" + resolveRedirectTarget(request, expense);
     }
 
     // 📊 Dashboard View
@@ -112,14 +140,46 @@ public class ExpenseController {
 
         for (Expense e : expenses) {
             writer.printf("%s,%.2f,%s,%s,%s%n",
-                    e.getVendor(),
+                    csvSafe(e.getVendor()),
                     e.getAmount(),
-                    e.getDate(),
-                    e.getCategory(),
-                    e.getCard() != null ? e.getCard().getMaskedNumber() : "N/A");
+                    csvSafe(e.getDate() != null ? e.getDate().toString() : ""),
+                    csvSafe(e.getCategory()),
+                    csvSafe(e.getCard() != null ? e.getCard().getMaskedNumber() : "N/A"));
         }
 
         writer.flush();
         writer.close();
+    }
+
+    private boolean isDashboardRequest(HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
+        return referer != null && referer.contains("/expenses/dashboard");
+    }
+
+    private String resolveRedirectTarget(HttpServletRequest request, Expense expense) {
+        if (isDashboardRequest(request) && expense.getCard() != null && expense.getCard().getId() != null) {
+            return "/expenses/dashboard?cardId=" + expense.getCard().getId();
+        }
+        return "/expenses";
+    }
+
+    private String csvSafe(String value) {
+        if (value == null) {
+            return "";
+        }
+        String sanitized = value.replaceAll("[\\r\\n]+", " ").trim();
+        if (!sanitized.isEmpty()) {
+            char first = sanitized.charAt(0);
+            if (first == '=' || first == '+' || first == '-' || first == '@') {
+                sanitized = "'" + sanitized;
+            }
+        }
+        if (sanitized.contains("\"")) {
+            sanitized = sanitized.replace("\"", "\"\"");
+        }
+        if (sanitized.contains(",") || sanitized.contains("\"")) {
+            sanitized = "\"" + sanitized + "\"";
+        }
+        return sanitized;
     }
 }

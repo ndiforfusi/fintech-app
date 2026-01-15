@@ -95,6 +95,31 @@
             background-color: #A9742C;
         }
 
+        .alert {
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .alert-success {
+            background-color: #e7f6ec;
+            color: #1f7a3f;
+            border: 1px solid #b7e1c4;
+        }
+
+        .alert-error {
+            background-color: #fdecea;
+            color: #a13a2b;
+            border: 1px solid #f5c2b8;
+        }
+
+        .field-error {
+            color: #a13a2b;
+            font-size: 0.85rem;
+            margin-top: 0.35rem;
+        }
+
         @media (max-width: 600px) {
             .nav-center a {
                 display: block;
@@ -125,15 +150,23 @@
     <!-- Form -->
     <div class="card-form-container">
         <h2>Add New Credit Card</h2>
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}">
+            Credit card saved successfully.
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}">
+            Please correct the highlighted fields.
+        </div>
         <form method="post" action="/cards" th:object="${card}">
             <div class="form-group">
                 <label for="cardHolderName">Card Holder Name</label>
                 <input type="text" id="cardHolderName" name="cardHolderName" th:field="*{cardHolderName}" required>
+                <span class="field-error" th:if="${#fields.hasErrors('cardHolderName')}" th:errors="*{cardHolderName}"></span>
             </div>
 
             <div class="form-group">
                 <label for="maskedNumber">Masked Number</label>
                 <input type="text" id="maskedNumber" name="maskedNumber" placeholder="**** **** **** 1234" th:field="*{maskedNumber}" required>
+                <span class="field-error" th:if="${#fields.hasErrors('maskedNumber')}" th:errors="*{maskedNumber}"></span>
             </div>
 
             <div class="form-group">
@@ -145,16 +178,19 @@
                     <option value="Amex">American Express</option>
                     <option value="Discover">Discover</option>
                 </select>
+                <span class="field-error" th:if="${#fields.hasErrors('cardType')}" th:errors="*{cardType}"></span>
             </div>
 
             <div class="form-group">
                 <label for="expiry">Expiry Date</label>
                 <input type="date" id="expiry" name="expiry" th:field="*{expiry}" required>
+                <span class="field-error" th:if="${#fields.hasErrors('expiry')}" th:errors="*{expiry}"></span>
             </div>
 
             <div class="form-group">
                 <label for="creditLimit">Credit Limit ($)</label>
                 <input type="number" id="creditLimit" name="creditLimit" step="0.01" th:field="*{creditLimit}" required>
+                <span class="field-error" th:if="${#fields.hasErrors('creditLimit')}" th:errors="*{creditLimit}"></span>
             </div>
 
             <div class="form-group">

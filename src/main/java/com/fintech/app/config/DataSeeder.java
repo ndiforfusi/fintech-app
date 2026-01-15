@@ -5,12 +5,16 @@ import com.fintech.app.entity.Expense;
 import com.fintech.app.repository.CreditCardRepository;
 import com.fintech.app.service.ExpenseService;
 import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
 @Component
 public class DataSeeder {
+
+    private static final Logger logger = LoggerFactory.getLogger(DataSeeder.class);
 
     private final CreditCardRepository creditCardRepo;
     private final ExpenseService expenseService;
@@ -51,9 +55,9 @@ public class DataSeeder {
 
             expenseService.save(expense);
 
-            System.out.println("✅ Sample data seeded: 2 credit cards and 1 expense added.");
+            logger.info("Sample data seeded: 2 credit cards and 1 expense added.");
         } else {
-            System.out.println("ℹ️ Data already exists. Skipping seeding.");
+            logger.info("Data already exists. Skipping seeding.");
         }
     }
 }
