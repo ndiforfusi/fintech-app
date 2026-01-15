@@ -114,6 +114,25 @@
       justify-content: center;
     }
 
+    .alert {
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+    }
+
+    .alert-success {
+      background-color: #e7f6ec;
+      color: #1f7a3f;
+      border: 1px solid #b7e1c4;
+    }
+
+    .alert-error {
+      background-color: #fdecea;
+      color: #a13a2b;
+      border: 1px solid #f5c2b8;
+    }
+
     .chart-container {
       flex: 1 1 300px;
       min-width: 300px;
@@ -165,6 +184,13 @@
 <div class="container">
   <h2 class="dashboard-title">Monthly Expenses</h2>
 
+  <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}">
+    Expense saved successfully.
+  </div>
+  <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}">
+    Please correct the highlighted fields.
+  </div>
+
   <!-- Header Row -->
   <div class="form-labels">
     <div>Vendor</div>
@@ -176,7 +202,7 @@
   </div>
 
   <!-- Form -->
-  <form method="post" th:object="${expense}" class="dashboard-form-table">
+  <form method="post" action="/expenses" th:object="${expense}" class="dashboard-form-table">
     <input type="text" th:field="*{vendor}" placeholder="Vendor" required>
     <input type="number" th:field="*{amount}" step="0.01" placeholder="Amount" required>
     <input type="date" th:field="*{date}" required>

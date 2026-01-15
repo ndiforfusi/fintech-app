@@ -111,6 +111,11 @@
       gap: 1rem;
     }
 
+    .form-field {
+      display: flex;
+      flex-direction: column;
+    }
+
     .form-group input,
     .form-group select {
       padding: 0.6rem;
@@ -120,7 +125,6 @@
     }
 
     .form-group button {
-      grid-column: span 2;
       padding: 0.75rem 1.5rem;
       background-color: #C7A35C;
       color: white;
@@ -135,13 +139,38 @@
       background-color: #A9742C;
     }
 
+    .form-action {
+      grid-column: span 2;
+    }
+
+    .alert {
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+    }
+
+    .alert-success {
+      background-color: #e7f6ec;
+      color: #1f7a3f;
+      border: 1px solid #b7e1c4;
+    }
+
+    .alert-error {
+      background-color: #fdecea;
+      color: #a13a2b;
+      border: 1px solid #f5c2b8;
+    }
+
+    .field-error {
+      color: #a13a2b;
+      font-size: 0.85rem;
+      margin-top: 0.35rem;
+    }
+
     @media (max-width: 600px) {
       .form-group {
         grid-template-columns: 1fr;
-      }
-
-      .form-group button {
-        grid-column: span 1;
       }
 
       .nav-center a {
@@ -174,6 +203,13 @@
   <div class="container">
     <h2>Monthly Expenses</h2>
 
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}">
+      Expense saved successfully.
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}">
+      Please correct the highlighted fields.
+    </div>
+
     <!-- CSV Download Button -->
     <div class="download-button">
       <a href="/expenses/export">⬇️ Download CSV</a>
@@ -196,22 +232,39 @@
           <td th:text="${exp.amount}">0.00</td>
           <td th:text="${exp.date}">2025-01-01</td>
           <td th:text="${exp.category}">Category</td>
-          <td th:text="${exp.card.maskedNumber}">**** **** **** 1234</td>
+          <td th:text="${exp.card != null ? exp.card.maskedNumber : 'N/A'}">**** **** **** 1234</td>
         </tr>
       </tbody>
     </table>
 
     <!-- Add New Expense Form -->
     <form method="post" th:object="${expense}" class="form-group">
-      <input type="text" th:field="*{vendor}" placeholder="Vendor" required>
-      <input type="number" th:field="*{amount}" step="0.01" placeholder="Amount" required>
-      <input type="date" th:field="*{date}" required>
-      <input type="text" th:field="*{category}" placeholder="Category" required>
-      <select th:field="*{card.id}" required>
-        <option value="">Select Credit Card</option>
-        <option th:each="card : ${cards}" th:value="${card.id}" th:text="${card.cardType} + ' - ' + ${card.maskedNumber}"></option>
-      </select>
-      <button type="submit">Add Expense</button>
+      <div class="form-field">
+        <input type="text" th:field="*{vendor}" placeholder="Vendor" required>
+        <span class="field-error" th:if="${#fields.hasErrors('vendor')}" th:errors="*{vendor}"></span>
+      </div>
+      <div class="form-field">
+        <input type="number" th:field="*{amount}" step="0.01" placeholder="Amount" required>
+        <span class="field-error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
+      </div>
+      <div class="form-field">
+        <input type="date" th:field="*{date}" required>
+        <span class="field-error" th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></span>
+      </div>
+      <div class="form-field">
+        <input type="text" th:field="*{category}" placeholder="Category" required>
+        <span class="field-error" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></span>
+      </div>
+      <div class="form-field">
+        <select th:field="*{card.id}" required>
+          <option value="">Select Credit Card</option>
+          <option th:each="card : ${cards}" th:value="${card.id}" th:text="${card.cardType} + ' - ' + ${card.maskedNumber}"></option>
+        </select>
+        <span class="field-error" th:if="${#fields.hasErrors('card')}" th:errors="*{card}"></span>
+      </div>
+      <div class="form-field form-action">
+        <button type="submit">Add Expense</button>
+      </div>
     </form>
   </div>
 

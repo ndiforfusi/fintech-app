@@ -1,6 +1,11 @@
 package com.fintech.app.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Entity
@@ -10,12 +15,23 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Vendor is required.")
+    @Size(max = 100, message = "Vendor must be 100 characters or fewer.")
     private String vendor;
+
+    @Positive(message = "Amount must be greater than zero.")
     private double amount;
+
+    @NotNull(message = "Date is required.")
+    @PastOrPresent(message = "Date cannot be in the future.")
     private LocalDate date;
+
+    @NotBlank(message = "Category is required.")
+    @Size(max = 60, message = "Category must be 60 characters or fewer.")
     private String category;
 
     @ManyToOne
+    @NotNull(message = "Credit card selection is required.")
     private CreditCard card;
 
     // ====== Getters and Setters ======
