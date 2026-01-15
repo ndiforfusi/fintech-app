@@ -2,9 +2,9 @@ version: '3.8'
 
 services:
   fintech-mysql:
-    image: mysql:8.0
+    image: mysql:8.0.37
     container_name: fintech-mysql
-    restart: always
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: rootpass
       MYSQL_DATABASE: fintech
@@ -16,6 +16,12 @@ services:
       - fintech-net
     ports:
       - "3306:3306"
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -prootpass"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
 
   fintech-app:
     image: fintech-app
@@ -23,16 +29,25 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    restart: unless-stopped
     ports:
       - "8080:8080"
     depends_on:
-      - fintech-mysql
+      fintech-mysql:
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://fintech-mysql:3306/fintech
       SPRING_DATASOURCE_USERNAME: fintech_user
       SPRING_DATASOURCE_PASSWORD: fintech_pass
+      SPRING_PROFILES_ACTIVE: docker
     networks:
       - fintech-net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/actuator/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 6
+      start_period: 30s
 
 volumes:
   db_data:

@@ -13,9 +13,15 @@ spec:
       labels:
         app: fintech-app
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: fintech-app
         image: 327019199684.dkr.ecr.us-east-2.amazonaws.com/fintech-app:latest
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
         env:
@@ -28,6 +34,11 @@ spec:
             secretKeyRef:
               name: mysql-secret
               key: root-password
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
         readinessProbe:
           httpGet:
             path: /actuator/health
@@ -45,6 +56,14 @@ spec:
           periodSeconds: 10
           timeoutSeconds: 5
           failureThreshold: 5
+        startupProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 12
         resources:
           requests:
             cpu: "500m"

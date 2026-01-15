@@ -1,0 +1,12 @@
+.git
+.gitignore
+.github
+.DS_Store
+.dockerignore
+Dockerfile
+README.md
+k8s
+eks_addons
+setup-project.sh
+**/target
+**/*.log

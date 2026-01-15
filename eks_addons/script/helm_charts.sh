@@ -41,15 +41,13 @@ helm repo update
 echo "📁 Creating namespace 'monitoring' if not exists..."
 kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
 
-# Check if prometheus-stack is already installed
-if helm list -n monitoring | grep -q "^prometheus-stack"; then
-    echo "✅ prometheus-stack is already installed in the 'monitoring' namespace. Skipping installation."
-else
-    echo "🚀 Installing prometheus-stack via Helm..."
-    helm install prometheus-stack prometheus-community/kube-prometheus-stack \
-        --namespace monitoring \
-        --set grafana.enabled=true
-fi
+# Install or upgrade prometheus-stack
+echo "🚀 Installing/Upgrading prometheus-stack via Helm..."
+helm upgrade --install prometheus-stack prometheus-community/kube-prometheus-stack \
+    --namespace monitoring \
+    --set grafana.enabled=true \
+    --wait \
+    --timeout 10m
 
 # Wait for Grafana deployment to be ready
 echo "⏳ Waiting for Grafana deployment to become ready..."
