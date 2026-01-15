@@ -37,6 +37,15 @@ A full-stack Java-based FinTech application to manage and track credit card expe
 
 ---
 
+## ✅ Production Readiness Enhancements
+
+- Multi-stage Docker build with patched base images and non-root runtime user.
+- Docker/Kubernetes health checks and probes for smoother rollouts.
+- CI/CD hardening with Maven caching, updated actions, and traceable image labels.
+- Safer Helm automation with idempotent upgrades and namespace handling.
+
+---
+
 ## 📦 Project Structure
 
 . ├── src/ │ ├── main/java/com/fintech/app/ │ ├── resources/templates/ # Thymeleaf HTML │ └── application.yml # Configurations ├── k8s/ # Kubernetes Manifests ├── Dockerfile # App containerization ├── pom.xml # Maven dependencies └── .github/workflows/ci-cd.yml # CI/CD pipeline
@@ -47,16 +56,20 @@ A full-stack Java-based FinTech application to manage and track credit card expe
 
 1. **Start MySQL DB (optional if using local setup)**
 2. **Build & Run:**
+   ```bash
+   mvn clean install
+   mvn spring-boot:run
+   ```
+   Access: http://localhost:8080/expenses
+
+🐳 **Docker Build & Run**
+
 ```bash
-mvn clean install
-mvn spring-boot:run
-Access: http://localhost:8080/expenses
-
-🐳 Docker Build & Run
-
 docker build -t fintech-app .
 docker run -p 8080:8080 fintech-app
-☁️ AWS CI/CD Pipeline
+```
+
+☁️ **AWS CI/CD Pipeline**
 CI Steps:
 Maven Build (mvn package)
 
@@ -216,8 +229,6 @@ grafana-cli admin reset-admin-password <newpassword>
 Example:
 
 grafana-cli admin reset-admin-password admin123
-
-
 
 
 
