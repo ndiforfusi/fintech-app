@@ -2,3 +2,5 @@
 .scannerwork/
 *.code-workspace
 #git ignore file
+#deployment main
+#deployement 2

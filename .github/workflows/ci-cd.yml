@@ -25,7 +25,7 @@ on:
 env:
   AWS_REGION: us-east-2
   # Fallback if account-id secrets are absent (still overridden by STS below)
-  AWS_ACCOUNT_ID: 327019199684
+  AWS_ACCOUNT_ID: 977099032919
   ECR_REPO: fintech-app
 
 jobs:
@@ -148,19 +148,6 @@ jobs:
           docker container prune -f || true
           docker volume prune -f || true
 
-      - name: Notify Slack (✅ Build Success)
-        if: success()
-        run: |
-          curl -X POST -H 'Content-type: application/json' \
-            --data '{"text":"✅ *Build Succeeded* by `${{ github.actor }}` in `${{ steps.resolve.outputs.env-name }}`."}' \
-            ${{ secrets.SLACK_WEBHOOK_URL }}
-
-      - name: Notify Slack (❌ Build Failed)
-        if: failure()
-        run: |
-          curl -X POST -H 'Content-type: application/json' \
-            --data '{"text":"❌ *Build Failed* by `${{ github.actor }}` in `${{ github.event.inputs.environment || 'prod' }}`."}' \
-            ${{ secrets.SLACK_WEBHOOK_URL }}
 
   deploy:
     name: Deploy to EKS
@@ -210,12 +197,6 @@ jobs:
           echo "env-name=$ENV" >> "$GITHUB_OUTPUT"
           echo "account-id=$ACCOUNT_ID" >> "$GITHUB_OUTPUT"
           echo "Resolved AWS Account ID: $ACCOUNT_ID"
-
-      - name: Notify Slack (🚀 Starting Deployment)
-        run: |
-          curl -X POST -H 'Content-type: application/json' \
-            --data '{"text":"🚀 *Deployment started* in `${{ steps.resolve.outputs.env-name }}`."}' \
-            ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Configure kubectl via AWS CLI
         run: |
@@ -283,16 +264,5 @@ jobs:
           echo "📦 Applying Kustomize overlay: $OVERLAY_DIR"
           kubectl apply -k "$OVERLAY_DIR"
 
-      - name: Notify Slack (✅ Deploy Success)
-        if: success()
-        run: |
-          curl -X POST -H 'Content-type: application/json' \
-            --data '{"text":"✅ *Deployment Successful* to `${{ steps.resolve.outputs.env-name }}` by `${{ github.actor }}`."}' \
-            ${{ secrets.SLACK_WEBHOOK_URL }}
 
-      - name: Notify Slack (🔥 Deploy Failed)
-        if: failure()
-        run: |
-          curl -X POST -H 'Content-type: application/json' \
-            --data '{"text":"🔥 *Deployment FAILED* to `${{ steps.resolve.outputs.env-name }}`."}' \
-            ${{ secrets.SLACK_WEBHOOK_URL }}
+# new git 
