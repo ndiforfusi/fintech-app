@@ -5,7 +5,7 @@ metadata:
   namespace: monitoring
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-2:327019199684:certificate/2440a3ff-3027-456f-8244-c02d07708d99
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-2:029939913795:certificate/d647bc8a-fe0c-4e62-8f40-a19bd0c7591d
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/healthcheck-port: "80"
@@ -17,7 +17,7 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-  - host: grafana.dominionsystem.org
+  - host: grafana.fintech-groupb.com
     http:
       paths:
       - path: /
